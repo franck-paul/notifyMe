@@ -7,21 +7,35 @@ howto display browser notification using this plugin :
 
 Load (if necessary) /js/notify.js, and call notifyBrowser(msg[,title]):
 
-<pre>
-\<script type="text/javascript" src="index.php?pf=NotifyMe/js/notify.js"></script>
-\<script type="text/javascript">
+
+```
+#!html
+
+<script type="text/javascript" src="index.php?pf=NotifyMe/js/notify.js"></script>
+<script type="text/javascript">
 	notifyBrowser('Hello world!');
-\</script>
-</pre>
+</script>
+
+```
 
 2. in PHP
 
 Autoload notifyMe class if necessary :
-<pre>
-$\_\_autoload['notifyMe'] = dirname(\_\_FILE\_\_).'/_admin.php';
-</pre>
+
+
+```
+#!php
+
+$__autoload['notifyMe'] = dirname(__FILE__).'/_admin.php';
+
+```
 
 Call Notify() function :
-<pre>
+
+
+```
+#!php
+
 notifyMe::Notify(msg[,title]);
-</pre>
+
+```
