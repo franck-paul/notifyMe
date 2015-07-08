@@ -20,4 +20,4 @@ function checkNewComments() {
 }
 
 // Set interval between two checks for new comments
-var notifyMe_checkNewComments_Timer = setInterval(checkNewComments,dotclear.notifyMe_Interval);
+var notifyMe_checkNewComments_Timer = setInterval(checkNewComments,dotclear.notifyMe_CheckNewComments);

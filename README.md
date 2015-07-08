@@ -22,20 +22,14 @@ Load (if necessary) /js/notify.js, and call notifyBrowser(msg[,title]):
 
 Autoload notifyMe class if necessary :
 
-
 ```
 #!php
-
 $__autoload['notifyMe'] = dirname(__FILE__).'/_admin.php';
-
 ```
 
 Call Notify() function :
 
-
 ```
 #!php
-
-notifyMe::Notify(msg[,title]);
-
+notifyMe::NotifyBrowser(msg[,title]);
 ```

@@ -14,3 +14,4 @@ if (!defined('DC_RC_PATH')) { return; }
 $__autoload['notifyMeRest'] = dirname(__FILE__).'/_services.php';
 
 $this->core->rest->addFunction('notifyMeCheckNewComments', array('notifyMeRest', 'checkNewComments'));
+$this->core->rest->addFunction('notifyMeCheckCurrentPost', array('notifyMeRest', 'checkCurrentPost'));

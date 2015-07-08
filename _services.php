@@ -53,4 +53,83 @@ class notifyMeRest
 
 		return $rsp;
 	}
+
+	/**
+	 * Serve method to check current edited post.
+	 *
+	 * @param	core	<b>dcCore</b>	dcCore instance
+	 * @param	get		<b>array</b>	cleaned $_GET
+	 *
+	 * @return	<b>xmlTag</b>	XML representation of response
+	 */
+	public static function checkCurrentPost($core,$get)
+	{
+		global $core;
+
+		if (empty($get['post_id'])) {
+			throw new Exception('No post ID');
+		}
+		if (empty($get['post_hash'])) {
+			throw new Exception('No post Hash');
+		}
+		if (empty($get['post_dt'])) {
+			throw new Exception('No post DT');
+		}
+
+		$params = array('post_id' => (integer) $get['post_id']);
+
+		if (isset($get['post_type'])) {
+			$params['post_type'] = $get['post_type'];
+		} else {
+			$params['post_type'] = '';	// Check any type of post
+		}
+
+		$rsp = new xmlTag('post');
+
+		$rs = $core->blog->getPosts($params);
+		if ($rs->isEmpty()) {
+			// Post does not exists yet
+			$rsp->ret = 'ok';
+		} else {
+			$core->media = new dcMedia($core);
+			$rs_media = $core->media->getPostMedia($rs->post_id);
+			$hash = self::hashPost($rs,$rs_media);
+			if ($hash == $get['post_hash']) {
+				$rsp->ret = 'ok';
+			} else {
+				// Fire a notification only if it has not been already fired
+				$dt = $rs->post_upddt;
+				if ($dt != $get['post_dt']) {
+					$rsp->ret = 'dirty';
+					$rsp->msg = __('Warning: The current post has been changed by another user!');
+					$rsp->post_dt = $dt;
+				} else {
+					$rsp->ret = 'ok';
+				}
+			}
+		}
+
+		return $rsp;
+	}
+
+	public static function hashPost($rs,$rs_media)
+	{
+		$l = array();
+		if ($rs->fetch()) {
+			// Do not take into account nb of comments or trackbacks, neither updated datetime
+			$cols = $rs->columns();
+			foreach ($cols as $i => $c) {
+				if (!in_array($i, array('nb_comment','nb_trackback','post_upddt'))) {
+					$l[] = $rs->f($c);
+				}
+			}
+		}
+		if (!empty($rs_media)) {
+			foreach ($rs_media as $f) {
+				$l[] = $f->media_id;
+			}
+		}
+		$str = serialize($l);
+		return hash('md5',$str);
+	}
 }

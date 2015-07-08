@@ -22,7 +22,10 @@ try
 	$core->auth->user_prefs->addWorkspace('notifyMe');
 	if (!$core->auth->user_prefs->notifyMe->prefExists('active')) {
 		$core->auth->user_prefs->notifyMe->put('active',false,'boolean','Active');
-		$core->auth->user_prefs->notifyMe->put('new_comments',30,'integer','Interval in seconds between new comments checking');
+		$core->auth->user_prefs->notifyMe->put('new_comments',30,'integer',
+			'Interval in seconds between new comments checking');
+		$core->auth->user_prefs->notifyMe->put('current_post',60,'integer',
+			'Interval in seconds betwwen current edited post checking');
 	}
 
 	$core->setVersion('notifyMe',$new_version);

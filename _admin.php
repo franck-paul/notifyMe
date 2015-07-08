@@ -17,7 +17,12 @@ __('Browser notifications').__('Display notifications in your web browser');
 $core->addBehavior('adminBeforeUserOptionsUpdate',array('notifyMeBehaviors','adminBeforeUserOptionsUpdate'));
 $core->addBehavior('adminPreferencesForm',array('notifyMeBehaviors','adminPreferencesForm'));
 
+// On all admin pages
 $core->addBehavior('adminPageHTMLHead',array('notifyMeBehaviors','adminPageHTMLHead'));
+
+// On post and page edit
+$core->addBehavior('adminPostHeaders',array('notifyMeBehaviors','adminPostHeaders'));
+$core->addBehavior('adminPageHeaders',array('notifyMeBehaviors','adminPostHeaders'));
 
 class notifyMeBehaviors
 {
@@ -28,12 +33,17 @@ class notifyMeBehaviors
 		// Get and store user's prefs for plugin options
 		$core->auth->user_prefs->addWorkspace('notifyMe');
 		try {
-			$interval = (integer) $_POST['notifyMe_interval'];
-			if ($interval < 1) {
-				$interval = 30;	// seconds
+			$notifyMe_newcomments = (integer) $_POST['notifyMe_newcomments'];
+			if ($notifyMe_newcomments < 1) {
+				$notifyMe_newcomments = 30;	// seconds
+			}
+			$notifyMe_currentpost = (integer) $_POST['notifyMe_currentpost'];
+			if ($notifyMe_currentpost < 1) {
+				$notifyMe_currentpost = 60;	// seconds
 			}
 			$core->auth->user_prefs->notifyMe->put('active',!empty($_POST['notifyMe_active']),'boolean');
-			$core->auth->user_prefs->notifyMe->put('new_comments',$interval);
+			$core->auth->user_prefs->notifyMe->put('new_comments',$notifyMe_newcomments);
+			$core->auth->user_prefs->notifyMe->put('current_post',$notifyMe_currentpost);
 		}
 		catch (Exception $e)
 		{
@@ -53,10 +63,13 @@ class notifyMeBehaviors
 		form::checkbox('notifyMe_active',1,$core->auth->user_prefs->notifyMe->active).' '.
 		__('Display browser notification').'</label></p>'.
 
-		'<p><label for="notifyMe_interval">'.__('Check new comments every (in seconds, default: 30):').' '.
-		form::field('notifyMe_interval',5,4,(integer) $core->auth->user_prefs->notifyMe->new_comments).'</label></p>'.
+		'<p><label for="notifyMe_newcomments">'.__('Check new comments every (in seconds, default: 30):').' '.
+		form::field('notifyMe_newcomments',5,4,(integer) $core->auth->user_prefs->notifyMe->new_comments).'</label></p>'.
 
 		'<p class="form-note">'.__('Only new non-junk comments for the current blog will be checked, whatever is the moderation setting.').'</p>'.
+
+		'<p><label for="notifyMe_currentpost">'.__('Check current edited post every (in seconds, default: 60):').' '.
+		form::field('notifyMe_currentpost',5,4,(integer) $core->auth->user_prefs->notifyMe->current_post).'</label></p>'.
 
 		'</div>';
 	}
@@ -97,24 +110,63 @@ class notifyMeBehaviors
 				'<script type="text/javascript">'."\n".
 				"//<![CDATA[\n".
 				dcPage::jsVar('dotclear.notifyMe_Title',$title).
-				dcPage::jsVar('dotclear.notifyMe_Interval',$interval * 1000).
+				dcPage::jsVar('dotclear.notifyMe_CheckNewComments',$interval * 1000).
 				dcPage::jsVar('dotclear.notifyMe_LastCommentId',$last_comment_id).
 				"\n//]]>\n".
 				"</script>\n".
-				'<script type="text/javascript" src="index.php?pf=notifyMe/js/notify.js"></script>'.
-				'<script type="text/javascript" src="index.php?pf=notifyMe/js/services.js"></script>';
+				'<script type="text/javascript" src="index.php?pf=notifyMe/js/notify.js"></script>'."\n".
+				'<script type="text/javascript" src="index.php?pf=notifyMe/js/common.js"></script>'."\n";
+		}
+	}
+
+	public static function adminPostHeaders()
+	{
+		global $core, $post_id;
+
+		$core->auth->user_prefs->addWorkspace('notifyMe');
+		if ($core->auth->user_prefs->notifyMe->active && $post_id) {
+
+			$params = array('post_id' => $post_id);
+			$rs = $core->blog->getPosts($params);
+			if ($rs->isEmpty()) {
+				// Not record ?
+				return;
+			}
+			$rs_media = $core->media->getPostMedia($post_id);
+			$hash = notifyMeRest::hashPost($rs,$rs_media);
+			$dt = $rs->post_upddt;
+
+			// Set notification title
+			$title = sprintf(__('Dotclear : %s'),$core->blog->name);
+
+			// Get interval between two check
+			$interval = (integer) $core->auth->user_prefs->notifyMe->current_post;
+			if (!$interval) {
+				$interval = 60;	// 60 seconds by default
+			}
+
+			return
+				'<script type="text/javascript">'."\n".
+				"//<![CDATA[\n".
+				dcPage::jsVar('dotclear.notifyMe_CheckCurrentPost',$interval * 1000).
+				dcPage::jsVar('dotclear.notifyMe_CurrentPostId',$post_id).
+				dcPage::jsVar('dotclear.notifyMe_CurrentPostHash',$hash).
+				dcPage::jsVar('dotclear.notifyMe_CurrentPostDT',$dt).
+				"\n//]]>\n".
+				"</script>\n".
+				'<script type="text/javascript" src="index.php?pf=notifyMe/js/post.js"></script>'."\n";
 		}
 	}
 }
 
 class notifyMe
 {
-	public static function Notify($message,$title='Dotclear')
+	public static function NotifyBrowser($message,$title='Dotclear')
 	{
 		echo '<script type="text/javascript">'.
 			'notifyBrowser("'.
 				html::escapeJS(str_replace("\n",'. ',$message))."','".
 				html::escapeJS($title)."');".
-			'</script>';
+			'</script>'."\n";
 	}
 }

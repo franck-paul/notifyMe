@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 notifyMe module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-07 14:46+0200\n"
+"POT-Creation-Date: 2015-07-08 10:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../hg-plugins/notifyMe//_admin.php:15 ../hg-plugins/notifyMe//_admin.php:50
+#: ../hg-plugins/notifyMe//_admin.php:15 ../hg-plugins/notifyMe//_admin.php:60
 msgid "Browser notifications"
 msgstr ""
 
@@ -25,19 +25,24 @@ msgstr ""
 msgid "Display notifications in your web browser"
 msgstr ""
 
-#: ../hg-plugins/notifyMe//_admin.php:54
+#: ../hg-plugins/notifyMe//_admin.php:64
 msgid "Display browser notification"
 msgstr ""
 
-#: ../hg-plugins/notifyMe//_admin.php:56
+#: ../hg-plugins/notifyMe//_admin.php:66
 msgid "Check new comments every (in seconds, default: 30):"
 msgstr ""
 
-#: ../hg-plugins/notifyMe//_admin.php:59
+#: ../hg-plugins/notifyMe//_admin.php:69
 msgid "Only new non-junk comments for the current blog will be checked, whatever is the moderation setting."
 msgstr ""
 
-#: ../hg-plugins/notifyMe//_admin.php:88
+#: ../hg-plugins/notifyMe//_admin.php:71
+msgid "Check current edited post every (in seconds, default: 60):"
+msgstr ""
+
+#: ../hg-plugins/notifyMe//_admin.php:101
+#: ../hg-plugins/notifyMe//_admin.php:140
 #, php-format
 msgid "Dotclear : %s"
 msgstr ""
@@ -48,3 +53,7 @@ msgid "One new comment has been posted"
 msgid_plural "%s new comments have been posted"
 msgstr[0] ""
 msgstr[1] ""
+
+#: ../hg-plugins/notifyMe//_services.php:104
+msgid "Warning: The current post has been changed by another user!"
+msgstr ""
