@@ -20,10 +20,25 @@ try
 {
 	// Default user settings
 	$core->auth->user_prefs->addWorkspace('notifyMe');
+
 	if (!$core->auth->user_prefs->notifyMe->prefExists('active')) {
 		$core->auth->user_prefs->notifyMe->put('active',false,'boolean','Active');
+	}
+
+	if (!$core->auth->user_prefs->notifyMe->prefExists('new_comments_on')) {
+		$core->auth->user_prefs->notifyMe->put('new_comments_on',true,'boolean',
+			'Notify for new comments/trackbacks');
+	}
+	if (!$core->auth->user_prefs->notifyMe->prefExists('new_comments')) {
 		$core->auth->user_prefs->notifyMe->put('new_comments',30,'integer',
 			'Interval in seconds between new comments checking');
+	}
+
+	if (!$core->auth->user_prefs->notifyMe->prefExists('current_post_on')) {
+		$core->auth->user_prefs->notifyMe->put('current_post_on',true,'boolean',
+			'Notify for entry changes');
+	}
+	if (!$core->auth->user_prefs->notifyMe->prefExists('current_post')) {
 		$core->auth->user_prefs->notifyMe->put('current_post',60,'integer',
 			'Interval in seconds betwwen current edited post checking');
 	}

@@ -34,6 +34,14 @@ class notifyMeRest
 
 			'sql' => 'AND comment_id > '.$last_id 		// only new ones
 			);
+
+		$email = $core->auth->getInfo('user_email');
+		$url = $core->auth->getInfo('user_url');
+		if ($email && $url) {
+			// Ignore own comments/trackbacks
+			$params['sql'] .= " AND (comment_email <> '".$email."' OR comment_site <> '".$url."')";
+		}
+
 		$comments = $core->blog->getComments($params);
 		$count = $core->blog->getComments($params,true)->f(0);
 
@@ -101,7 +109,7 @@ class notifyMeRest
 				$dt = $rs->post_upddt;
 				if ($dt != $get['post_dt']) {
 					$rsp->ret = 'dirty';
-					$rsp->msg = __('Warning: The current post has been changed by another user!');
+					$rsp->msg = __('Warning: The current entry has been changed elsewhere!');
 					$rsp->post_dt = $dt;
 				} else {
 					$rsp->ret = 'ok';

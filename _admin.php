@@ -33,16 +33,18 @@ class notifyMeBehaviors
 		// Get and store user's prefs for plugin options
 		$core->auth->user_prefs->addWorkspace('notifyMe');
 		try {
-			$notifyMe_newcomments = (integer) $_POST['notifyMe_newcomments'];
+			$notifyMe_newcomments = (integer) $_POST['notifyMe_new_comments'];
 			if ($notifyMe_newcomments < 1) {
 				$notifyMe_newcomments = 30;	// seconds
 			}
-			$notifyMe_currentpost = (integer) $_POST['notifyMe_currentpost'];
+			$notifyMe_currentpost = (integer) $_POST['notifyMe_current_post'];
 			if ($notifyMe_currentpost < 1) {
 				$notifyMe_currentpost = 60;	// seconds
 			}
 			$core->auth->user_prefs->notifyMe->put('active',!empty($_POST['notifyMe_active']),'boolean');
+			$core->auth->user_prefs->notifyMe->put('new_comments_on',!empty($_POST['notifyMe_new_comments_on']),'boolean');
 			$core->auth->user_prefs->notifyMe->put('new_comments',$notifyMe_newcomments);
+			$core->auth->user_prefs->notifyMe->put('current_post_on',!empty($_POST['notifyMe_current_post_on']),'boolean');
 			$core->auth->user_prefs->notifyMe->put('current_post',$notifyMe_currentpost);
 		}
 		catch (Exception $e)
@@ -63,14 +65,27 @@ class notifyMeBehaviors
 		form::checkbox('notifyMe_active',1,$core->auth->user_prefs->notifyMe->active).' '.
 		__('Display browser notification').'</label></p>'.
 
-		'<p><label for="notifyMe_newcomments">'.__('Check new comments every (in seconds, default: 30):').' '.
-		form::field('notifyMe_newcomments',5,4,(integer) $core->auth->user_prefs->notifyMe->new_comments).'</label></p>'.
+		'<p class="form-note">'.__('The notifications will have to be explicitly granted for the current session before displaying the first one.').'</p>'.
 
-		'<p class="form-note">'.__('Only new non-junk comments for the current blog will be checked, whatever is the moderation setting.').'</p>'.
+		'<hr />'.
+		'<h5>'.__('Notifications:').'</h5>'.
+		'<div class="two-boxes">'.
 
-		'<p><label for="notifyMe_currentpost">'.__('Check current edited post every (in seconds, default: 60):').' '.
-		form::field('notifyMe_currentpost',5,4,(integer) $core->auth->user_prefs->notifyMe->current_post).'</label></p>'.
+		'<p><label for="notifyMe_new_comments" class="classic">'.
+		form::checkbox('notifyMe_new_comments_on',1,$core->auth->user_prefs->notifyMe->new_comments_on).' '.
+		__('Check new comments every (in seconds, default: 30):').' '.
+		form::field('notifyMe_new_comments',5,4,(integer) $core->auth->user_prefs->notifyMe->new_comments).'</label></p>'.
 
+		'<p class="form-note">'.__('Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored.').'</p>'.
+
+		'</div><div class="two-boxes">'.
+
+		'<p><label for="notifyMe_current_post" class="classic">'.
+		form::checkbox('notifyMe_current_post_on',1,$core->auth->user_prefs->notifyMe->current_post_on).' '.
+		__('Check current edited post every (in seconds, default: 60):').' '.
+		form::field('notifyMe_current_post',5,4,(integer) $core->auth->user_prefs->notifyMe->current_post).'</label></p>'.
+
+		'</div>'.
 		'</div>';
 	}
 
@@ -81,41 +96,58 @@ class notifyMeBehaviors
 		$core->auth->user_prefs->addWorkspace('notifyMe');
 		if ($core->auth->user_prefs->notifyMe->active) {
 
-			$params = array(
-				'limit' => 1,					// only the last one
-				'no_content' => true,			// content is not required
-				'comment_status_not' => -2,		// ignore spam
-				'order' => 'comment_id DESC'	// get last first
-				);
-			$comments = $core->blog->getComments($params);
-			$count = $core->blog->getComments($params,true);
-
-			if ($count) {
-				$comments->fetch();
-				$last_comment_id = $comments->comment_id;
-			} else {
-				$last_comment_id = -1;
-			}
-
 			// Set notification title
 			$title = sprintf(__('Dotclear : %s'),$core->blog->name);
-
-			// Get interval between two check
-			$interval = (integer) $core->auth->user_prefs->notifyMe->new_comments;
-			if (!$interval) {
-				$interval = 30;	// 30 seconds by default
-			}
 
 			echo
 				'<script type="text/javascript">'."\n".
 				"//<![CDATA[\n".
 				dcPage::jsVar('dotclear.notifyMe_Title',$title).
-				dcPage::jsVar('dotclear.notifyMe_CheckNewComments',$interval * 1000).
-				dcPage::jsVar('dotclear.notifyMe_LastCommentId',$last_comment_id).
 				"\n//]]>\n".
 				"</script>\n".
-				'<script type="text/javascript" src="index.php?pf=notifyMe/js/notify.js"></script>'."\n".
-				'<script type="text/javascript" src="index.php?pf=notifyMe/js/common.js"></script>'."\n";
+				'<script type="text/javascript" src="index.php?pf=notifyMe/js/notify.js"></script>'."\n";
+
+			if ($core->auth->user_prefs->notifyMe->new_comments_on) {
+
+				$params = array(
+					'limit' => 1,					// only the last one
+					'no_content' => true,			// content is not required
+					'comment_status_not' => -2,		// ignore spam
+					'order' => 'comment_id DESC'	// get last first
+					);
+
+				$email = $core->auth->getInfo('user_email');
+				$url = $core->auth->getInfo('user_url');
+				if ($email && $url) {
+					// Ignore own comments/trackbacks
+					$params['sql'] = " AND (comment_email <> '".$email."' OR comment_site <> '".$url."')";
+				}
+
+				$comments = $core->blog->getComments($params);
+				$count = $core->blog->getComments($params,true);
+
+				if ($count) {
+					$comments->fetch();
+					$last_comment_id = $comments->comment_id;
+				} else {
+					$last_comment_id = -1;
+				}
+
+				// Get interval between two check
+				$interval = (integer) $core->auth->user_prefs->notifyMe->new_comments;
+				if (!$interval) {
+					$interval = 30;	// 30 seconds by default
+				}
+
+				echo
+					'<script type="text/javascript">'."\n".
+					"//<![CDATA[\n".
+					dcPage::jsVar('dotclear.notifyMe_CheckNewComments',$interval * 1000).
+					dcPage::jsVar('dotclear.notifyMe_LastCommentId',$last_comment_id).
+					"\n//]]>\n".
+					"</script>\n".
+					'<script type="text/javascript" src="index.php?pf=notifyMe/js/common.js"></script>'."\n";
+			}
 		}
 	}
 
@@ -124,7 +156,10 @@ class notifyMeBehaviors
 		global $core, $post_id;
 
 		$core->auth->user_prefs->addWorkspace('notifyMe');
-		if ($core->auth->user_prefs->notifyMe->active && $post_id) {
+		if ($core->auth->user_prefs->notifyMe->active &&
+			$core->auth->user_prefs->notifyMe->current_post_on &&
+			$post_id)
+		{
 
 			$params = array('post_id' => $post_id);
 			$rs = $core->blog->getPosts($params);
