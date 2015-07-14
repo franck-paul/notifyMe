@@ -20,7 +20,7 @@ $core->addBehavior('adminPreferencesForm',array('notifyMeBehaviors','adminPrefer
 // On all admin pages
 $core->addBehavior('adminPageHTMLHead',array('notifyMeBehaviors','adminPageHTMLHead'));
 
-// On post and page edit
+// On post and page editing mode
 $core->addBehavior('adminPostHeaders',array('notifyMeBehaviors','adminPostHeaders'));
 $core->addBehavior('adminPageHeaders',array('notifyMeBehaviors','adminPostHeaders'));
 
@@ -109,7 +109,7 @@ class notifyMeBehaviors
 
 			if ($core->auth->user_prefs->notifyMe->new_comments_on) {
 
-				$params = array(
+				$sqlp = array(
 					'limit' => 1,					// only the last one
 					'no_content' => true,			// content is not required
 					'comment_status_not' => -2,		// ignore spam
@@ -120,15 +120,14 @@ class notifyMeBehaviors
 				$url = $core->auth->getInfo('user_url');
 				if ($email && $url) {
 					// Ignore own comments/trackbacks
-					$params['sql'] = " AND (comment_email <> '".$email."' OR comment_site <> '".$url."')";
+					$sqlp['sql'] = " AND (comment_email <> '".$email."' OR comment_site <> '".$url."')";
 				}
 
-				$comments = $core->blog->getComments($params);
-				$count = $core->blog->getComments($params,true);
+				$rs = $core->blog->getComments($sqlp);
 
-				if ($count) {
-					$comments->fetch();
-					$last_comment_id = $comments->comment_id;
+				if ($rs->count()) {
+					$rs->fetch();
+					$last_comment_id = $rs->comment_id;
 				} else {
 					$last_comment_id = -1;
 				}
@@ -161,14 +160,15 @@ class notifyMeBehaviors
 			$post_id)
 		{
 
-			$params = array('post_id' => $post_id);
-			$rs = $core->blog->getPosts($params);
+			$sqlp = array('post_id' => $post_id);
+			$rs = $core->blog->getPosts($sqlp);
 			if ($rs->isEmpty()) {
 				// Not record ?
 				return;
 			}
-			$rs_media = $core->media->getPostMedia($post_id);
-			$hash = notifyMeRest::hashPost($rs,$rs_media);
+			$media = new dcMedia($core);
+			$rsm = $media->getPostMedia($post_id);
+			$hash = notifyMeRest::hashPost($rs,$rsm);
 			$dt = $rs->post_upddt;
 
 			// Set notification title

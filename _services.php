@@ -27,7 +27,7 @@ class notifyMeRest
 
 		$last_id = !empty($get['last_id']) ? $get['last_id'] : -1;
 
-		$params = array(
+		$sqlp = array(
 			'no_content' => true,			// content is not required
 			'comment_status_not' => -2,		// ignore spam
 			'order' => 'comment_id ASC',
@@ -39,23 +39,21 @@ class notifyMeRest
 		$url = $core->auth->getInfo('user_url');
 		if ($email && $url) {
 			// Ignore own comments/trackbacks
-			$params['sql'] .= " AND (comment_email <> '".$email."' OR comment_site <> '".$url."')";
+			$sqlp['sql'] .= " AND (comment_email <> '".$email."' OR comment_site <> '".$url."')";
 		}
 
-		$comments = $core->blog->getComments($params);
-		$count = $core->blog->getComments($params,true)->f(0);
+		$rs = $core->blog->getComments($sqlp);
+		$count = $rs->count();
 
 		if ($count) {
-			while ($comments->fetch()) {
-				$last_comment_id = $comments->comment_id;
+			while ($rs->fetch()) {
+				$last_comment_id = $rs->comment_id;
 			}
-		} else {
-			$last_comment_id = -1;
 		}
 		$rsp = new xmlTag('check');
 		$rsp->ret = $count;
 		if ($count) {
-			$rsp->msg = sprintf(__('One new comment has been posted','%s new comments have been posted',(int)$count),$count);
+			$rsp->msg = sprintf(__('One new comment has been posted','%s new comments have been posted',$count),$count);
 			$rsp->last_id = $last_comment_id;
 		}
 
@@ -84,24 +82,24 @@ class notifyMeRest
 			throw new Exception('No post DT');
 		}
 
-		$params = array('post_id' => (integer) $get['post_id']);
+		$sqlp = array('post_id' => (integer) $get['post_id']);
 
 		if (isset($get['post_type'])) {
-			$params['post_type'] = $get['post_type'];
+			$sqlp['post_type'] = $get['post_type'];
 		} else {
-			$params['post_type'] = '';	// Check any type of post
+			$sqlp['post_type'] = '';	// Check any type of post
 		}
 
 		$rsp = new xmlTag('post');
 
-		$rs = $core->blog->getPosts($params);
+		$rs = $core->blog->getPosts($sqlp);
 		if ($rs->isEmpty()) {
 			// Post does not exists yet
 			$rsp->ret = 'ok';
 		} else {
-			$core->media = new dcMedia($core);
-			$rs_media = $core->media->getPostMedia($rs->post_id);
-			$hash = self::hashPost($rs,$rs_media);
+			$media = new dcMedia($core);
+			$rsm = $media->getPostMedia($rs->post_id);
+			$hash = self::hashPost($rs,$rsm);
 			if ($hash == $get['post_hash']) {
 				$rsp->ret = 'ok';
 			} else {
@@ -120,7 +118,7 @@ class notifyMeRest
 		return $rsp;
 	}
 
-	public static function hashPost($rs,$rs_media)
+	public static function hashPost($rs,$rsm)
 	{
 		$l = array();
 		if ($rs->fetch()) {
@@ -132,8 +130,8 @@ class notifyMeRest
 				}
 			}
 		}
-		if (!empty($rs_media)) {
-			foreach ($rs_media as $f) {
+		if (!empty($rsm)) {
+			foreach ($rsm as $f) {
 				$l[] = $f->media_id;
 			}
 		}
