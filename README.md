@@ -64,6 +64,13 @@ GPL v2, fork and distribute it freely. You may pay me a 🍺 or even 🍻 if you
 - Add per-notification activation
 - Do not notify on own comments/trackbacks (we presume that you know what you have juste done)
 
+0.3.1 - 2015/07/14
+
+- Avoid using same var's name as global's ones
+
+0.4 - 2015/09/27
+
+- Add a 4 seconds timeout for notification
 
 ## KNONWS ISSUES
 

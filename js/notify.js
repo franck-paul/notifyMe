@@ -15,6 +15,7 @@ function notifyBrowser(msg,title) {
 		if (Notification.permission === "granted") {
 			// Notifications granted, push it
 			var notification = new Notification(title,notify_options);
+			setTimeout(notification.close.bind(notification), 4000);
 		}
 
 		// Else, check if notification has not already been denied
@@ -30,6 +31,7 @@ function notifyBrowser(msg,title) {
 				// If notification granted, push it
 				if (permission === "granted") {
 					var notification = new Notification(title,notify_options);
+					setTimeout(notification.close.bind(notification), 4000);
 				}
 			});
 		}
