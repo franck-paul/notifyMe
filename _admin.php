@@ -105,7 +105,7 @@ class notifyMeBehaviors
 				dcPage::jsVar('dotclear.notifyMe_Title',$title).
 				"\n//]]>\n".
 				"</script>\n".
-				'<script type="text/javascript" src="index.php?pf=notifyMe/js/notify.js"></script>'."\n";
+				dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/notify.js')),$core->getVersion('notifyMe'));
 
 			if ($core->auth->user_prefs->notifyMe->new_comments_on) {
 
@@ -145,7 +145,7 @@ class notifyMeBehaviors
 					dcPage::jsVar('dotclear.notifyMe_LastCommentId',$last_comment_id).
 					"\n//]]>\n".
 					"</script>\n".
-					'<script type="text/javascript" src="index.php?pf=notifyMe/js/common.js"></script>'."\n";
+					dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/common.js')),$core->getVersion('notifyMe'));
 			}
 		}
 	}
@@ -189,7 +189,7 @@ class notifyMeBehaviors
 				dcPage::jsVar('dotclear.notifyMe_CurrentPostDT',$dt).
 				"\n//]]>\n".
 				"</script>\n".
-				'<script type="text/javascript" src="index.php?pf=notifyMe/js/post.js"></script>'."\n";
+				dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/post.js')),$core->getVersion('notifyMe'));
 		}
 	}
 }
