@@ -11,6 +11,12 @@
 
 if (!defined('DC_RC_PATH')) { return; }
 
+// Public and Admin mode
+
+if (!defined('DC_CONTEXT_ADMIN')) { return false; }
+
+// Admin mode
+
 $__autoload['notifyMeRest'] = dirname(__FILE__).'/_services.php';
 
 $this->core->rest->addFunction('notifyMeCheckNewComments', array('notifyMeRest', 'checkNewComments'));
