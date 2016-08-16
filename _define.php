@@ -15,8 +15,9 @@ $this->registerModule(
 	/* Name */				"Browser notifications",
 	/* Description*/		"Display notifications in your web browser",
 	/* Author */			"Franck Paul and contributors",
-	/* Version */			'0.4',
+	/* Version */			'0.5',
 	array(
+		/* Dependencies */	'requires' =>		array(array('core','2.8')),
 		/* Permissions */	'permissions' =>	'usage,contentadmin',
 		/* Type */			'type' =>			'plugin'
 	)
