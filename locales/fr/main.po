@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 notifyMe module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-17 17:40+0100\n"
+"POT-Creation-Date: 2016-12-17 18:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,9 @@ msgstr "Les notifications devront être explicitement autorisée pour la session
 
 msgid "Replace Dotclear notifications"
 msgstr "Remplace les notifications Dotclear"
+
+msgid "Including Dotclear errors"
+msgstr "Y compris les erreurs Dotclear"
 
 msgid "Notifications:"
 msgstr "Notifications :"

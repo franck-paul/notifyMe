@@ -30,6 +30,11 @@ try
 			'Replace Dotclear notifications');
 	}
 
+	if (!$core->auth->user_prefs->notifyMe->prefExists('system_error')) {
+		$core->auth->user_prefs->notifyMe->put('system_error',false,'boolean',
+			'Including Dotclear errors?');
+	}
+
 	if (!$core->auth->user_prefs->notifyMe->prefExists('new_comments_on')) {
 		$core->auth->user_prefs->notifyMe->put('new_comments_on',true,'boolean',
 			'Notify for new comments/trackbacks');

@@ -11,7 +11,7 @@ function notifyBrowser(msg,title,silent) {
 	// Set title to default value if not provided
 	title = title || 'Dotclear';
 
-	// Set silent option to true if defined
+	// Set silent option to false if not defined
 	silent = silent || false;
 	if (silent) {
 		notify_options.silent = true;

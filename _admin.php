@@ -30,13 +30,23 @@ $core->addBehavior('adminPageNotification',array('notifyMeBehaviors','adminPageN
 
 class notifyMeBehaviors
 {
+	private static function NotifyBrowser($message,$title='Dotclear',$silent=false)
+	{
+		return '<script type="text/javascript">'.
+			'notifyBrowser(\''.
+				html::escapeJS(str_replace("\n",'. ',$message))."','".
+				html::escapeJS($title)."',".
+				($silent ? '1' : '0').");".
+			'</script>'."\n";
+	}
+
 	public static function adminPageNotificationError($err)
 	{
 		global $core;
 
 		$core->auth->user_prefs->addWorkspace('notifyMe');
 		if ($core->auth->user_prefs->notifyMe->active) {
-			if ($core->auth->user_prefs->notifyMe->system) {
+			if ($core->auth->user_prefs->notifyMe->system && $core->auth->user_prefs->notifyMe->system_error) {
 
 				// Set notification title
 				$title = sprintf(__('Dotclear : %s'),$core->blog->name).__(' - error');
@@ -44,7 +54,7 @@ class notifyMeBehaviors
 				// Set notification text
 				$msg = (string) $err;
 
-				return notifyMe::NotifyBrowser($msg,$title,false);
+				return self::NotifyBrowser($msg,$title,false);
 			}
 		}
 	}
@@ -75,7 +85,7 @@ class notifyMeBehaviors
 				// Set notification text
 				$msg = $notice['text'];
 
-				return notifyMe::notifyBrowser($msg,$title,$silent);
+				return self::notifyBrowser($msg,$title,$silent);
 			}
 		}
 	}
@@ -97,6 +107,7 @@ class notifyMeBehaviors
 			}
 			$core->auth->user_prefs->notifyMe->put('active',!empty($_POST['notifyMe_active']),'boolean');
 			$core->auth->user_prefs->notifyMe->put('system',!empty($_POST['notifyMe_system']),'boolean');
+			$core->auth->user_prefs->notifyMe->put('system_error',!empty($_POST['notifyMe_system_error']),'boolean');
 			$core->auth->user_prefs->notifyMe->put('new_comments_on',!empty($_POST['notifyMe_new_comments_on']),'boolean');
 			$core->auth->user_prefs->notifyMe->put('new_comments',$notifyMe_newcomments);
 			$core->auth->user_prefs->notifyMe->put('current_post_on',!empty($_POST['notifyMe_current_post_on']),'boolean');
@@ -116,20 +127,27 @@ class notifyMeBehaviors
 		echo
 		'<div class="fieldset" id="notifyMe"><h5>'.__('Browser notifications').'</h5>'.
 
+		'<div class="two-boxes">'.
 		'<p><label for="notifyMe_active" class="classic">'.
 		form::checkbox('notifyMe_active',1,$core->auth->user_prefs->notifyMe->active).' '.
 		__('Display browser notification').'</label></p>'.
 
 		'<p class="form-note">'.__('The notifications will have to be explicitly granted for the current session before displaying the first one.').'</p>'.
 
+		'</div><div class="two-boxes">'.
+
 		'<p><label for="notifyMe_system" class="classic">'.
 		form::checkbox('notifyMe_system',1,$core->auth->user_prefs->notifyMe->system).' '.
 		__('Replace Dotclear notifications').'</label></p>'.
 
+		'<p><label for="notifyMe_system_error" class="classic">'.
+		form::checkbox('notifyMe_system_error',1,$core->auth->user_prefs->notifyMe->system_error).' '.
+		__('Including Dotclear errors').'</label></p>'.
+
+		'</div>'.
 		'<hr />'.
 		'<h5>'.__('Notifications:').'</h5>'.
 
-		'<div class="two-boxes">'.
 		'<p><label for="notifyMe_new_comments" class="classic">'.
 		form::checkbox('notifyMe_new_comments_on',1,$core->auth->user_prefs->notifyMe->new_comments_on).' '.
 		__('Check new comments every (in seconds, default: 30):').' '.
@@ -137,14 +155,11 @@ class notifyMeBehaviors
 
 		'<p class="form-note">'.__('Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored.').'</p>'.
 
-		'</div><div class="two-boxes">'.
-
 		'<p><label for="notifyMe_current_post" class="classic">'.
 		form::checkbox('notifyMe_current_post_on',1,$core->auth->user_prefs->notifyMe->current_post_on).' '.
 		__('Check current edited post every (in seconds, default: 60):').' '.
 		form::field('notifyMe_current_post',5,4,(integer) $core->auth->user_prefs->notifyMe->current_post).'</label></p>'.
 
-		'</div>'.
 		'</div>';
 	}
 
