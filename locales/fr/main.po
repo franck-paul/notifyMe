@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 notifyMe module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-09 11:29+0200\n"
+"POT-Creation-Date: 2016-12-17 17:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,24 @@ msgstr "Notifications dans le navigateur"
 msgid "Display notifications in your web browser"
 msgstr "Affiche des notifications dans votre navigateur"
 
+msgid " - error"
+msgstr " - erreur"
+
+#, php-format
+msgid "Dotclear : %s"
+msgstr "Dotclear : %s"
+
+msgid " - warning"
+msgstr " - attention"
+
 msgid "Display browser notification"
 msgstr "Affiche des notifications dans votre navigateur"
 
 msgid "The notifications will have to be explicitly granted for the current session before displaying the first one."
 msgstr "Les notifications devront être explicitement autorisée pour la session courante avant l'affichage de la première."
+
+msgid "Replace Dotclear notifications"
+msgstr "Remplace les notifications Dotclear"
 
 msgid "Notifications:"
 msgstr "Notifications :"
@@ -39,10 +52,6 @@ msgstr "Seuls les nouveaux commentaires non indésirables du blog courant seront
 
 msgid "Check current edited post every (in seconds, default: 60):"
 msgstr "Contrôler l'entrée en cours d'édition toutes les (en secondes, 60 par défaut) :"
-
-#, php-format
-msgid "Dotclear : %s"
-msgstr "Dotclear : %s"
 
 #, php-format
 msgid "One new comment has been posted"

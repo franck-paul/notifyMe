@@ -1,14 +1,21 @@
 /* Browser notification
    (adpated from https://developer.mozilla.org/fr/docs/Web/API/Notification)
 -------------------------------------------------------*/
-function notifyBrowser(msg,title) {
+function notifyBrowser(msg,title,silent) {
 	var notify_options = {
 		body: msg,
-		icon: "images/favicon.ico"
+		icon: "images/favicon.ico",
+		silent: false
 	};
 
 	// Set title to default value if not provided
 	title = title || 'Dotclear';
+
+	// Set silent option to true if defined
+	silent = silent || false;
+	if (silent) {
+		notify_options.silent = true;
+	}
 
 	if ("Notification" in window) {
 		// Check if user has already granted notification for this session

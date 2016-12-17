@@ -25,6 +25,11 @@ try
 		$core->auth->user_prefs->notifyMe->put('active',false,'boolean','Active');
 	}
 
+	if (!$core->auth->user_prefs->notifyMe->prefExists('system')) {
+		$core->auth->user_prefs->notifyMe->put('system',false,'boolean',
+			'Replace Dotclear notifications');
+	}
+
 	if (!$core->auth->user_prefs->notifyMe->prefExists('new_comments_on')) {
 		$core->auth->user_prefs->notifyMe->put('new_comments_on',true,'boolean',
 			'Notify for new comments/trackbacks');
