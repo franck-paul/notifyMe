@@ -40,10 +40,8 @@ class notifyMeBehaviors
 			'</script>'."\n";
 	}
 
-	public static function adminPageNotificationError($err)
+	public static function adminPageNotificationError($core,$err)
 	{
-		global $core;
-
 		$core->auth->user_prefs->addWorkspace('notifyMe');
 		if ($core->auth->user_prefs->notifyMe->active) {
 			if ($core->auth->user_prefs->notifyMe->system && $core->auth->user_prefs->notifyMe->system_error) {
@@ -59,10 +57,8 @@ class notifyMeBehaviors
 		}
 	}
 
-	public static function adminPageNotification($notice)
+	public static function adminPageNotification($core,$notice)
 	{
-		global $core;
-
 		$core->auth->user_prefs->addWorkspace('notifyMe');
 		if ($core->auth->user_prefs->notifyMe->active) {
 			if ($core->auth->user_prefs->notifyMe->system) {
