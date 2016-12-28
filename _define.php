@@ -17,7 +17,7 @@ $this->registerModule(
 	/* Author */			"Franck Paul and contributors",
 	/* Version */			'0.6',
 	array(
-		/* Dependencies */	'requires' =>		array(array('core','2.11-dev')),
+		/* Dependencies */	'requires' =>		array(array('core','2.11')),
 		/* Permissions */	'permissions' =>	'usage,contentadmin',
 		/* Type */			'type' =>			'plugin',
 		/* Settings */		'settings' => 		array('pref' => '#user-options.notifyMe')
