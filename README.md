@@ -72,6 +72,7 @@ GPL v2, fork and distribute it freely. You may pay me a 🍺 or even 🍻 if you
 
 - Add a 4 seconds timeout for notification
 
+
 ## KNONWS ISSUES
 
 - ⚡autosave plugin will fire a notification at every save.

@@ -1,3 +1,7 @@
+/*global $, dotclear, notifyBrowser */
+/*exported notifyMe_checkNewComments_Timer */
+'use strict';
+
 function checkNewComments() {
 	var params = {
 		f: 'notifyMeCheckNewComments',
@@ -8,7 +12,7 @@ function checkNewComments() {
 		if ($('rsp[status=failed]',data).length > 0) {
 			// For debugging purpose only:
 			// console.log($('rsp',data).attr('message'));
-			console.log('Dotclear REST server error');
+			window.console.log('Dotclear REST server error');
 		} else {
 			var new_comments = Number($('rsp>check',data).attr('ret'));
 			if (new_comments > 0) {
