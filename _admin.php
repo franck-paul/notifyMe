@@ -16,19 +16,19 @@ if (!defined('DC_CONTEXT_ADMIN')) {return;}
 // dead but useful code, in order to have translations
 __('Browser notifications') . __('Display notifications in your web browser');
 
-$core->addBehavior('adminBeforeUserOptionsUpdate', array('notifyMeBehaviors', 'adminBeforeUserOptionsUpdate'));
-$core->addBehavior('adminPreferencesForm', array('notifyMeBehaviors', 'adminPreferencesForm'));
+$core->addBehavior('adminBeforeUserOptionsUpdate', ['notifyMeBehaviors', 'adminBeforeUserOptionsUpdate']);
+$core->addBehavior('adminPreferencesForm', ['notifyMeBehaviors', 'adminPreferencesForm']);
 
 // On all admin pages
-$core->addBehavior('adminPageHTMLHead', array('notifyMeBehaviors', 'adminPageHTMLHead'));
+$core->addBehavior('adminPageHTMLHead', ['notifyMeBehaviors', 'adminPageHTMLHead']);
 
 // On post and page editing mode
-$core->addBehavior('adminPostHeaders', array('notifyMeBehaviors', 'adminPostHeaders'));
-$core->addBehavior('adminPageHeaders', array('notifyMeBehaviors', 'adminPostHeaders'));
+$core->addBehavior('adminPostHeaders', ['notifyMeBehaviors', 'adminPostHeaders']);
+$core->addBehavior('adminPageHeaders', ['notifyMeBehaviors', 'adminPostHeaders']);
 
 // Transform error and standard DC notices to notifications
-$core->addBehavior('adminPageNotificationError', array('notifyMeBehaviors', 'adminPageNotificationError'));
-$core->addBehavior('adminPageNotification', array('notifyMeBehaviors', 'adminPageNotification'));
+$core->addBehavior('adminPageNotificationError', ['notifyMeBehaviors', 'adminPageNotificationError']);
+$core->addBehavior('adminPageNotification', ['notifyMeBehaviors', 'adminPageNotification']);
 
 class notifyMeBehaviors
 {
@@ -65,10 +65,10 @@ class notifyMeBehaviors
         if ($core->auth->user_prefs->notifyMe->active) {
             if ($core->auth->user_prefs->notifyMe->system) {
 
-                $type = array(
+                $type = [
                     'success' => '',
                     'warning' => __(' - warning'),
-                    'error'   => __(' - error'));
+                    'error'   => __(' - error')];
 
                 // Set notification title
                 $title  = sprintf(__('Dotclear : %s'), $core->blog->name);
@@ -177,12 +177,12 @@ class notifyMeBehaviors
 
             if ($core->auth->user_prefs->notifyMe->new_comments_on) {
 
-                $sqlp = array(
+                $sqlp = [
                     'limit'              => 1,                 // only the last one
                     'no_content'         => true,              // content is not required
                     'comment_status_not' => -2,                // ignore spam
                     'order'              => 'comment_id DESC' // get last first
-                );
+                ];
 
                 $email = $core->auth->getInfo('user_email');
                 $url   = $core->auth->getInfo('user_url');
@@ -225,7 +225,7 @@ class notifyMeBehaviors
             $core->auth->user_prefs->notifyMe->current_post_on &&
             $post_id) {
 
-            $sqlp = array('post_id' => $post_id);
+            $sqlp = ['post_id' => $post_id];
             $rs   = $core->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {
                 // Not record ?

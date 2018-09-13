@@ -17,11 +17,11 @@ $this->registerModule(
     "Browser notifications",                     // Name
     "Display notifications in your web browser", // Description
     "Franck Paul and contributors",              // Author
-    '0.6',                                       // Version
-    array(
-        'requires'    => array(array('core', '2.11')),              // Dependencies
-        'permissions' => 'usage,contentadmin',                      // Permissions
-        'type'        => 'plugin',                                  // Type
-        'settings'    => array('pref' => '#user-options.notifyMe') // Settings
-    )
+    '0.7',                                       // Version
+    [
+        'requires'    => [['core', '2.13']],                   // Dependencies
+        'permissions' => 'usage,contentadmin',                 // Permissions
+        'type'        => 'plugin',                             // Type
+        'settings'    => ['pref' => '#user-options.notifyMe'] // Settings
+    ]
 );

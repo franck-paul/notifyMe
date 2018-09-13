@@ -21,5 +21,5 @@ if (!defined('DC_CONTEXT_ADMIN')) {return false;}
 
 $__autoload['notifyMeRest'] = dirname(__FILE__) . '/_services.php';
 
-$this->core->rest->addFunction('notifyMeCheckNewComments', array('notifyMeRest', 'checkNewComments'));
-$this->core->rest->addFunction('notifyMeCheckCurrentPost', array('notifyMeRest', 'checkCurrentPost'));
+$this->core->rest->addFunction('notifyMeCheckNewComments', ['notifyMeRest', 'checkNewComments']);
+$this->core->rest->addFunction('notifyMeCheckCurrentPost', ['notifyMeRest', 'checkCurrentPost']);

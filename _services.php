@@ -29,13 +29,13 @@ class notifyMeRest
 
         $last_id = !empty($get['last_id']) ? $get['last_id'] : -1;
 
-        $sqlp = array(
+        $sqlp = [
             'no_content'         => true, // content is not required
             'comment_status_not' => -2,   // ignore spam
             'order'              => 'comment_id ASC',
 
             'sql'                => 'AND comment_id > ' . $last_id // only new ones
-        );
+        ];
 
         $email = $core->auth->getInfo('user_email');
         $url   = $core->auth->getInfo('user_url');
@@ -84,7 +84,7 @@ class notifyMeRest
             throw new Exception('No post DT');
         }
 
-        $sqlp = array('post_id' => (integer) $get['post_id']);
+        $sqlp = ['post_id' => (integer) $get['post_id']];
 
         if (isset($get['post_type'])) {
             $sqlp['post_type'] = $get['post_type'];
@@ -122,12 +122,12 @@ class notifyMeRest
 
     public static function hashPost($rs, $rsm)
     {
-        $l = array();
+        $l = [];
         if ($rs->fetch()) {
             // Do not take into account nb of comments or trackbacks, neither updated datetime
             $cols = $rs->columns();
             foreach ($cols as $i => $c) {
-                if (!in_array($i, array('nb_comment', 'nb_trackback', 'post_upddt'))) {
+                if (!in_array($i, ['nb_comment', 'nb_trackback', 'post_upddt'])) {
                     $l[] = $rs->f($c);
                 }
             }
