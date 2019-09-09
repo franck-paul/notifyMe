@@ -5,7 +5,7 @@
    (adpated from https://developer.mozilla.org/fr/docs/Web/API/Notification)
 -------------------------------------------------------*/
 function notifyBrowser(msg, title, silent) {
-  var notify_options = {
+  const notify_options = {
     body: msg,
     icon: 'images/favicon.ico',
     silent: false
@@ -24,7 +24,7 @@ function notifyBrowser(msg, title, silent) {
     // Check if user has already granted notification for this session
     if (Notification.permission === 'granted') {
       // Notifications granted, push it
-      var notification = new Notification(title, notify_options);
+      let notification = new Notification(title, notify_options);
       setTimeout(notification.close.bind(notification), 4000);
     }
 
@@ -40,7 +40,7 @@ function notifyBrowser(msg, title, silent) {
 
         // If notification granted, push it
         if (permission === 'granted') {
-          var notification = new Notification(title, notify_options);
+          let notification = new Notification(title, notify_options);
           setTimeout(notification.close.bind(notification), 4000);
         }
       });
