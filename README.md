@@ -21,8 +21,8 @@ Load (if necessary) /js/notify.js, and call notifyBrowser(msg[,title]):
 
 ```
 #!html
-<script type="text/javascript" src="index.php?pf=NotifyMe/js/notify.js"></script>
-<script type="text/javascript">
+<script src="index.php?pf=NotifyMe/js/notify.js"></script>
+<script>
 	notifyBrowser('Hello world!');
 </script>
 ```

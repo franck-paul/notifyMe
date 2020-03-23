@@ -54,7 +54,7 @@ msgid "Only new non-junk comments for the current blog will be checked, whatever
 msgstr "Seuls les nouveaux commentaires non indésirables du blog courant seront contrôlés, qu'ils soient modérés a priori ou a posteriori. Vos propres commentaires et rétroliens seront ignorés."
 
 msgid "Check current edited post every (in seconds, default: 60):"
-msgstr "Contrôler l'entrée en cours d'édition toutes les (en secondes, 60 par défaut) :"
+msgstr "Contrôler la publication en cours d'édition toutes les (en secondes, 60 par défaut) :"
 
 #, php-format
 msgid "One new comment has been posted"
@@ -63,4 +63,4 @@ msgstr[0] "Un nouveau commentaire à été posté"
 msgstr[1] "%s nouveaux commentaires ont été postés"
 
 msgid "Warning: The current entry has been changed elsewhere!"
-msgstr "Attention: L'entrée en cours d'édition a été modifiée par ailleurs !"
+msgstr "Attention: La publication en cours d'édition a été modifiée par ailleurs !"

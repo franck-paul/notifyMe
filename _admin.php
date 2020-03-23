@@ -34,7 +34,7 @@ class notifyMeBehaviors
 {
     private static function NotifyBrowser($message, $title = 'Dotclear', $silent = false)
     {
-        return '<script type="text/javascript">' .
+        return '<script>' .
         'notifyBrowser(\'' .
         html::escapeJS(str_replace("\n", '. ', $message)) . "','" .
         html::escapeJS($title) . "'," .
@@ -170,7 +170,7 @@ class notifyMeBehaviors
             $title = sprintf(__('Dotclear : %s'), $core->blog->name);
 
             echo
-            '<script type="text/javascript">' . "\n" .
+            '<script>' . "\n" .
             dcPage::jsVar('dotclear.notifyMe_Title', $title) .
             "</script>\n" .
             dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/notify.js')), $core->getVersion('notifyMe'));
@@ -207,7 +207,7 @@ class notifyMeBehaviors
                 }
 
                 echo
-                '<script type="text/javascript">' . "\n" .
+                '<script>' . "\n" .
                 dcPage::jsVar('dotclear.notifyMe_CheckNewComments', $interval * 1000) .
                 dcPage::jsVar('dotclear.notifyMe_LastCommentId', $last_comment_id) .
                 "</script>\n" .
@@ -246,7 +246,7 @@ class notifyMeBehaviors
             }
 
             return
-            '<script type="text/javascript">' . "\n" .
+            '<script>' . "\n" .
             dcPage::jsVar('dotclear.notifyMe_CheckCurrentPost', $interval * 1000) .
             dcPage::jsVar('dotclear.notifyMe_CurrentPostId', $post_id) .
             dcPage::jsVar('dotclear.notifyMe_CurrentPostHash', $hash) .
@@ -261,7 +261,7 @@ class notifyMe
 {
     public static function NotifyBrowser($message, $title = 'Dotclear')
     {
-        echo '<script type="text/javascript">' .
+        echo '<script>' .
         'notifyBrowser(\'' .
         html::escapeJS(str_replace("\n", '. ', $message)) . "','" .
         html::escapeJS($title) . "');" .
