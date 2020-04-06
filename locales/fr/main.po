@@ -38,6 +38,9 @@ msgstr "Affiche des notifications dans votre navigateur"
 msgid "The notifications will have to be explicitly granted for the current session before displaying the first one."
 msgstr "Les notifications devront être explicitement autorisées pour la session courante avant l'affichage de la première."
 
+msgid "Wait for user interaction before closing notification"
+msgstr "Attendre une action de l'utilisateur avant de fermer la notification"
+
 msgid "Replace Dotclear notifications"
 msgstr "Remplace les notifications Dotclear"
 

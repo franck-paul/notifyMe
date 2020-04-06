@@ -4,11 +4,12 @@
 /* Browser notification
    (adpated from https://developer.mozilla.org/fr/docs/Web/API/Notification)
 -------------------------------------------------------*/
-function notifyBrowser(msg, title, silent) {
+function notifyBrowser(msg, title, silent, wait = false) {
   const notify_options = {
     body: msg,
     icon: 'images/favicon.ico',
-    silent: false
+    silent: false,
+    requireInteraction: wait
   };
 
   // Set title to default value if not provided
@@ -25,7 +26,9 @@ function notifyBrowser(msg, title, silent) {
     if (Notification.permission === 'granted') {
       // Notifications granted, push it
       let notification = new Notification(title, notify_options);
-      setTimeout(notification.close.bind(notification), 4000);
+      if (wait === false) {
+        setTimeout(notification.close.bind(notification), 4000);
+      }
     }
 
     // Else, check if notification has not already been denied
@@ -41,7 +44,9 @@ function notifyBrowser(msg, title, silent) {
         // If notification granted, push it
         if (permission === 'granted') {
           let notification = new Notification(title, notify_options);
-          setTimeout(notification.close.bind(notification), 4000);
+          if (wait === false) {
+            setTimeout(notification.close.bind(notification), 4000);
+          }
         }
       });
     }

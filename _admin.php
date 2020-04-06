@@ -103,6 +103,7 @@ class notifyMeBehaviors
                 $notifyMe_currentpost = 60; // seconds
             }
             $core->auth->user_prefs->notifyMe->put('active', !empty($_POST['notifyMe_active']), 'boolean');
+            $core->auth->user_prefs->notifyMe->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
             $core->auth->user_prefs->notifyMe->put('system', !empty($_POST['notifyMe_system']), 'boolean');
             $core->auth->user_prefs->notifyMe->put('system_error', !empty($_POST['notifyMe_system_error']), 'boolean');
             $core->auth->user_prefs->notifyMe->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), 'boolean');
@@ -128,6 +129,10 @@ class notifyMeBehaviors
         __('Display browser notification') . '</label></p>' .
 
         '<p class="form-note">' . __('The notifications will have to be explicitly granted for the current session before displaying the first one.') . '</p>' .
+
+        '<p><label for="notifyMe_wait" class="classic">' .
+        form::checkbox('notifyMe_wait', 1, $core->auth->user_prefs->notifyMe->wait) . ' ' .
+        __('Wait for user interaction before closing notification') . '</label></p>' .
 
         '</div><div class="two-boxes">' .
 
@@ -169,7 +174,10 @@ class notifyMeBehaviors
             $title = sprintf(__('Dotclear : %s'), $core->blog->name);
 
             echo
-            dcPage::jsJson('notify_me_config', ['title' => $title]) .
+            dcPage::jsJson('notify_me_config', [
+                'title' => $title,
+                'wait'  => $core->auth->user_prefs->notifyMe->wait
+            ]) .
             dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/notify.js')), $core->getVersion('notifyMe')) .
             dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/queue.js')), $core->getVersion('notifyMe'));
 

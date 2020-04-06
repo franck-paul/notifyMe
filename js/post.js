@@ -18,7 +18,7 @@ function checkCurrentPost() {
       } else {
         const dirty_post = $('rsp>post', data).attr('ret');
         if (dirty_post == 'dirty') {
-          notifyBrowser($('rsp>post', data).attr('msg'), dotclear.notify_me.config.title);
+          notifyBrowser($('rsp>post', data).attr('msg'), dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
           dotclear.notify_me.post.dt = $('rsp>post', data).attr('post_dt');
         }
       }

@@ -15,7 +15,7 @@ function checkNewComments() {
       } else {
         const new_comments = Number($('rsp>check', data).attr('ret'));
         if (new_comments > 0) {
-          notifyBrowser($('rsp>check', data).attr('msg'), dotclear.notify_me.config.title);
+          notifyBrowser($('rsp>check', data).attr('msg'), dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
           dotclear.notify_me.comments.id = $('rsp>check', data).attr('last_id');
         }
       }

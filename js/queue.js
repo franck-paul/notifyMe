@@ -34,7 +34,7 @@ dotclear.notify_me = {
   display: function() {
     if (dotclear.notify_me.queue.length) {
       dotclear.notify_me.queue.forEach(function(elt) {
-        notifyBrowser(elt.message, elt.title || null, elt.silent || false);
+        notifyBrowser(elt.message, elt.title || null, elt.silent || false, dotclear.notify_me.config.wait);
       });
       dotclear.notify_me.queue = [];
     }
