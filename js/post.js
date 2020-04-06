@@ -1,13 +1,13 @@
-/*global $, dotclear, notifyBrowser */
+/*global $, dotclear, notifyBrowser, getData */
 'use strict';
 
 function checkCurrentPost() {
   $.get('services.php', {
       f: 'notifyMeCheckCurrentPost',
       xd_check: dotclear.nonce,
-      post_id: dotclear.notifyMe_CurrentPostId,
-      post_hash: dotclear.notifyMe_CurrentPostHash,
-      post_dt: dotclear.notifyMe_CurrentPostDT,
+      post_id: dotclear.notify_me.post.id,
+      post_hash: dotclear.notify_me.post.hash,
+      post_dt: dotclear.notify_me.post.dt,
       post_type: '' // check any type of post
     })
     .done(function(data) {
@@ -18,8 +18,8 @@ function checkCurrentPost() {
       } else {
         const dirty_post = $('rsp>post', data).attr('ret');
         if (dirty_post == 'dirty') {
-          notifyBrowser($('rsp>post', data).attr('msg'), dotclear.notifyMe_Title);
-          dotclear.notifyMe_CurrentPostDT = $('rsp>post', data).attr('post_dt');
+          notifyBrowser($('rsp>post', data).attr('msg'), dotclear.notify_me.config.title);
+          dotclear.notify_me.post.dt = $('rsp>post', data).attr('post_dt');
         }
       }
     })
@@ -32,6 +32,7 @@ function checkCurrentPost() {
 }
 
 $(function() {
+  dotclear.notify_me.post = getData('notify_me_post');
   // Set interval between two checks for current post
-  setInterval(checkCurrentPost, dotclear.notifyMe_CheckCurrentPost);
+  setInterval(checkCurrentPost, dotclear.notify_me.post.check);
 });

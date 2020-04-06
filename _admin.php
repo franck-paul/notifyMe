@@ -34,12 +34,11 @@ class notifyMeBehaviors
 {
     private static function NotifyBrowser($message, $title = 'Dotclear', $silent = false)
     {
-        return '<script>' .
-        'notifyBrowser(\'' .
-        html::escapeJS(str_replace("\n", '. ', $message)) . "','" .
-        html::escapeJS($title) . "'," .
-            ($silent ? '1' : '0') . ");" .
-            '</script>' . "\n";
+        return dcPage::jsJson('notify_me_msg_' . time(), [
+            'message' => str_replace("\n", '. ', $message),
+            'title'   => $title,
+            'silent'  => $silent
+        ]);
     }
 
     public static function adminPageNotificationError($core, $err)
@@ -121,7 +120,7 @@ class notifyMeBehaviors
         $core->auth->user_prefs->addWorkspace('notifyMe');
 
         echo
-        '<div class="fieldset" id="notifyMe"><h5>' . __('Browser notifications') . '</h5>' .
+        '<div class="fieldset" id="notify-me"><h5>' . __('Browser notifications') . '</h5>' .
 
         '<div class="two-boxes">' .
         '<p><label for="notifyMe_active" class="classic">' .
@@ -170,10 +169,9 @@ class notifyMeBehaviors
             $title = sprintf(__('Dotclear : %s'), $core->blog->name);
 
             echo
-            '<script>' . "\n" .
-            dcPage::jsVar('dotclear.notifyMe_Title', $title) .
-            "</script>\n" .
-            dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/notify.js')), $core->getVersion('notifyMe'));
+            dcPage::jsJson('notify_me_config', ['title' => $title]) .
+            dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/notify.js')), $core->getVersion('notifyMe')) .
+            dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/queue.js')), $core->getVersion('notifyMe'));
 
             if ($core->auth->user_prefs->notifyMe->new_comments_on) {
 
@@ -207,10 +205,10 @@ class notifyMeBehaviors
                 }
 
                 echo
-                '<script>' . "\n" .
-                dcPage::jsVar('dotclear.notifyMe_CheckNewComments', $interval * 1000) .
-                dcPage::jsVar('dotclear.notifyMe_LastCommentId', $last_comment_id) .
-                "</script>\n" .
+                dcPage::jsJson('notify_me_comments', [
+                    'check' => $interval * 1000,
+                    'id'    => $last_comment_id
+                ]) .
                 dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/common.js')), $core->getVersion('notifyMe'));
             }
         }
@@ -228,7 +226,7 @@ class notifyMeBehaviors
             $sqlp = ['post_id' => $post_id];
             $rs   = $core->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {
-                // Not record ?
+                // Not recorded
                 return;
             }
             $media = new dcMedia($core);
@@ -246,12 +244,12 @@ class notifyMeBehaviors
             }
 
             return
-            '<script>' . "\n" .
-            dcPage::jsVar('dotclear.notifyMe_CheckCurrentPost', $interval * 1000) .
-            dcPage::jsVar('dotclear.notifyMe_CurrentPostId', $post_id) .
-            dcPage::jsVar('dotclear.notifyMe_CurrentPostHash', $hash) .
-            dcPage::jsVar('dotclear.notifyMe_CurrentPostDT', $dt) .
-            "</script>\n" .
+            dcPage::jsJson('notify_me_post', [
+                'check' => $interval * 1000,
+                'id'    => $post_id,
+                'hash'  => $hash,
+                'dt'    => $dt
+            ]) .
             dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/post.js')), $core->getVersion('notifyMe'));
         }
     }
@@ -261,10 +259,10 @@ class notifyMe
 {
     public static function NotifyBrowser($message, $title = 'Dotclear')
     {
-        echo '<script>' .
-        'notifyBrowser(\'' .
-        html::escapeJS(str_replace("\n", '. ', $message)) . "','" .
-        html::escapeJS($title) . "');" .
-            '</script>' . "\n";
+        return dcPage::jsJson('notify_me_msg_' . time(), [
+            'message' => str_replace("\n", '. ', $message),
+            'title'   => $title,
+            'silent'  => false
+        ]);
     }
 }

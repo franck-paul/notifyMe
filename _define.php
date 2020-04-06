@@ -19,9 +19,13 @@ $this->registerModule(
     "Franck Paul and contributors",              // Author
     '0.7',                                       // Version
     [
-        'requires'    => [['core', '2.13']],                   // Dependencies
-        'permissions' => 'usage,contentadmin',                 // Permissions
-        'type'        => 'plugin',                             // Type
-        'settings'    => ['pref' => '#user-options.notifyMe'] // Settings
+        'requires'    => [['core', '2.16']],                        // Dependencies
+        'permissions' => 'usage,contentadmin',                      // Permissions
+        'type'        => 'plugin',                                  // Type
+        'details'     => 'https://open-time.net/?q=notifyMe',       // Details URL
+        'support'     => 'https://github.com/franck-paul/notifyMe', // Support URL
+        'settings'    => [                                          // Settings
+            'pref' => '#user-options.notify-me'
+        ]
     ]
 );
