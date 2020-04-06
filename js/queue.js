@@ -3,6 +3,7 @@
 
 dotclear.notify_me = {
   queue: [],
+  running: false,
   add: function(msg, title = null, silent = false) {
     dotclear.notify_me.queue.push({
       message: msg,
@@ -11,6 +12,11 @@ dotclear.notify_me = {
     });
   },
   check: function() {
+    if (dotclear.notify_me.running) {
+      // Still in action, pass my turn
+      return;
+    }
+    dotclear.notify_me.running = true;
     // Look for timestamped message(s)
     const list = document.querySelectorAll("[id^='notify_me_msg_']");
     if (list.length) {
@@ -30,21 +36,19 @@ dotclear.notify_me = {
     if (Object.keys(data).length !== 0 && data.constructor === Object) {
       dotclear.notify_me.add(data.message, data.title || null, data.silent || false);
     }
-  },
-  display: function() {
+    // Display notifications
     if (dotclear.notify_me.queue.length) {
       dotclear.notify_me.queue.forEach(function(elt) {
         notifyBrowser(elt.message, elt.title || null, elt.silent || false, dotclear.notify_me.config.wait);
       });
       dotclear.notify_me.queue = [];
     }
+    dotclear.notify_me.running = false;
   }
 };
 
 $(function() {
   dotclear.notify_me.config = getData('notify_me_config');
-  // Set interval to get new message
-  setInterval(dotclear.notify_me.check, 100);
   // Set interval to empty queue
-  setInterval(dotclear.notify_me.display, 100);
+  setInterval(dotclear.notify_me.check, 100);
 });
