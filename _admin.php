@@ -10,8 +10,9 @@
  * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_CONTEXT_ADMIN')) {return;}
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return;
+}
 
 // dead but useful code, in order to have translations
 __('Browser notifications') . __('Display notifications in your web browser');
@@ -63,7 +64,6 @@ class notifyMeBehaviors
         $core->auth->user_prefs->addWorkspace('notifyMe');
         if ($core->auth->user_prefs->notifyMe->active) {
             if ($core->auth->user_prefs->notifyMe->system) {
-
                 $type = [
                     'success' => '',
                     'warning' => __(' - warning'),
@@ -93,6 +93,7 @@ class notifyMeBehaviors
 
         // Get and store user's prefs for plugin options
         $core->auth->user_prefs->addWorkspace('notifyMe');
+
         try {
             $notifyMe_newcomments = (integer) $_POST['notifyMe_new_comments'];
             if ($notifyMe_newcomments < 1) {
@@ -182,7 +183,6 @@ class notifyMeBehaviors
             dcPage::jsLoad(urldecode(dcPage::getPF('notifyMe/js/queue.js')), $core->getVersion('notifyMe'));
 
             if ($core->auth->user_prefs->notifyMe->new_comments_on) {
-
                 $sqlp = [
                     'limit'              => 1,                 // only the last one
                     'no_content'         => true,              // content is not required
@@ -227,10 +227,7 @@ class notifyMeBehaviors
         global $core, $post_id;
 
         $core->auth->user_prefs->addWorkspace('notifyMe');
-        if ($core->auth->user_prefs->notifyMe->active &&
-            $core->auth->user_prefs->notifyMe->current_post_on &&
-            $post_id) {
-
+        if ($core->auth->user_prefs->notifyMe->active && $core->auth->user_prefs->notifyMe->current_post_on && $post_id) {
             $sqlp = ['post_id' => $post_id];
             $rs   = $core->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {

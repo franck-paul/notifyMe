@@ -1,16 +1,16 @@
-/*global $, dotclear, notifyBrowser, getData */
+/*global $, dotclear, notifyBrowser */
 'use strict';
 
 function checkCurrentPost() {
   $.get('services.php', {
-      f: 'notifyMeCheckCurrentPost',
-      xd_check: dotclear.nonce,
-      post_id: dotclear.notify_me.post.id,
-      post_hash: dotclear.notify_me.post.hash,
-      post_dt: dotclear.notify_me.post.dt,
-      post_type: '' // check any type of post
-    })
-    .done(function(data) {
+    f: 'notifyMeCheckCurrentPost',
+    xd_check: dotclear.nonce,
+    post_id: dotclear.notify_me.post.id,
+    post_hash: dotclear.notify_me.post.hash,
+    post_dt: dotclear.notify_me.post.dt,
+    post_type: '', // check any type of post
+  })
+    .done(function (data) {
       if ($('rsp[status=failed]', data).length > 0) {
         // For debugging purpose only:
         // console.log($('rsp',data).attr('message'));
@@ -23,16 +23,16 @@ function checkCurrentPost() {
         }
       }
     })
-    .fail(function(jqXHR, textStatus, errorThrown) {
+    .fail(function (jqXHR, textStatus, errorThrown) {
       window.console.log(`AJAX ${textStatus} (status: ${jqXHR.status} ${errorThrown})`);
     })
-    .always(function() {
+    .always(function () {
       // Nothing here
     });
 }
 
-$(function() {
-  dotclear.notify_me.post = getData('notify_me_post');
+$(function () {
+  dotclear.notify_me.post = dotclear.getData('notify_me_post');
   // Set interval between two checks for current post
   setInterval(checkCurrentPost, dotclear.notify_me.post.check);
 });

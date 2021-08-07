@@ -1,13 +1,13 @@
-/*global $, dotclear, notifyBrowser, getData */
+/*global $, dotclear, notifyBrowser */
 'use strict';
 
 function checkNewComments() {
   $.get('services.php', {
-      f: 'notifyMeCheckNewComments',
-      xd_check: dotclear.nonce,
-      last_id: dotclear.notify_me.comments.id
-    })
-    .done(function(data) {
+    f: 'notifyMeCheckNewComments',
+    xd_check: dotclear.nonce,
+    last_id: dotclear.notify_me.comments.id,
+  })
+    .done(function (data) {
       if ($('rsp[status=failed]', data).length > 0) {
         // For debugging purpose only:
         // console.log($('rsp',data).attr('message'));
@@ -20,16 +20,16 @@ function checkNewComments() {
         }
       }
     })
-    .fail(function(jqXHR, textStatus, errorThrown) {
+    .fail(function (jqXHR, textStatus, errorThrown) {
       window.console.log(`AJAX ${textStatus} (status: ${jqXHR.status} ${errorThrown})`);
     })
-    .always(function() {
+    .always(function () {
       // Nothing here
     });
 }
 
-$(function() {
-  dotclear.notify_me.comments = getData('notify_me_comments');
+$(function () {
+  dotclear.notify_me.comments = dotclear.getData('notify_me_comments');
   // Set interval between two checks for new comments
   setInterval(checkNewComments, dotclear.notify_me.comments.check);
 });

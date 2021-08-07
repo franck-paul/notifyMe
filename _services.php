@@ -10,8 +10,9 @@
  * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-
-if (!defined('DC_CONTEXT_ADMIN')) {return;}
+if (!defined('DC_CONTEXT_ADMIN')) {
+    return;
+}
 
 class notifyMeRest
 {
@@ -34,7 +35,7 @@ class notifyMeRest
             'comment_status_not' => -2,   // ignore spam
             'order'              => 'comment_id ASC',
 
-            'sql'                => 'AND comment_id > ' . $last_id // only new ones
+            'sql' => 'AND comment_id > ' . $last_id // only new ones
         ];
 
         $email = $core->auth->getInfo('user_email');
@@ -138,6 +139,7 @@ class notifyMeRest
             }
         }
         $str = serialize($l);
+
         return hash('md5', $str);
     }
 }

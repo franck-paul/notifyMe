@@ -9,7 +9,7 @@ function notifyBrowser(msg, title, silent, wait = false) {
     body: msg,
     icon: 'images/favicon.ico',
     silent: false,
-    requireInteraction: wait
+    requireInteraction: wait,
   };
 
   // Set title to default value if not provided
@@ -34,8 +34,7 @@ function notifyBrowser(msg, title, silent, wait = false) {
     // Else, check if notification has not already been denied
     else if (Notification.permission !== 'denied') {
       // Ask permission for notification for this session
-      Notification.requestPermission(function(permission) {
-
+      Notification.requestPermission(function (permission) {
         // Store user's answer
         if (!('permission' in Notification)) {
           Notification.permission = permission;
