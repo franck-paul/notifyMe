@@ -23,10 +23,12 @@ $this->registerModule(
         'requires'    => [['core', '2.19']],                        // Dependencies
         'permissions' => 'usage,contentadmin',                      // Permissions
         'type'        => 'plugin',                                  // Type
-        'details'     => 'https://open-time.net/?q=notifyMe',       // Details URL
-        'support'     => 'https://github.com/franck-paul/notifyMe', // Support URL
         'settings'    => [                                          // Settings
             'pref' => '#user-options.notify-me'
-        ]
+        ],
+
+        'details'    => 'https://open-time.net/?q=notifyMe',       // Details URL
+        'support'    => 'https://github.com/franck-paul/notifyMe', // Support URL
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/notifyMe/main/dcstore.xml'
     ]
 );
