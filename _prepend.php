@@ -22,7 +22,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 // Admin mode
 
-$__autoload['notifyMeRest'] = dirname(__FILE__) . '/_services.php';
+$__autoload['notifyMeRest'] = __DIR__ . '/_services.php';
 
-$this->core->rest->addFunction('notifyMeCheckNewComments', ['notifyMeRest', 'checkNewComments']);
-$this->core->rest->addFunction('notifyMeCheckCurrentPost', ['notifyMeRest', 'checkCurrentPost']);
+dcCore::app()->rest->addFunction('notifyMeCheckNewComments', ['notifyMeRest', 'checkNewComments']);
+dcCore::app()->rest->addFunction('notifyMeCheckCurrentPost', ['notifyMeRest', 'checkCurrentPost']);

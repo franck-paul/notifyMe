@@ -18,17 +18,17 @@ $this->registerModule(
     'Browser notifications',                     // Name
     'Display notifications in your web browser', // Description
     'Franck Paul and contributors',              // Author
-    '0.8',                                       // Version
+    '0.9',                                       // Version
     [
-        'requires'    => [['core', '2.19']],                        // Dependencies
+        'requires'    => [['core', '2.23']],                        // Dependencies
         'permissions' => 'usage,contentadmin',                      // Permissions
         'type'        => 'plugin',                                  // Type
         'settings'    => [                                          // Settings
-            'pref' => '#user-options.notify-me'
+            'pref' => '#user-options.notify-me',
         ],
 
         'details'    => 'https://open-time.net/?q=notifyMe',       // Details URL
         'support'    => 'https://github.com/franck-paul/notifyMe', // Support URL
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/notifyMe/master/dcstore.xml'
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/notifyMe/master/dcstore.xml',
     ]
 );

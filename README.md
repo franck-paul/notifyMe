@@ -12,73 +12,44 @@ Each kind of notification may be disabled or enabled regardless the plugin is en
 
 ## API
 
-howto display browser notification using this plugin :
+How to display browser notification using this plugin.
 
-1. in Javascript
+### in Javascript
 
 Load (if necessary) /js/notify.js, and call notifyBrowser(msg[,title]):
 
-
-```
-#!html
+```html
 <script src="index.php?pf=NotifyMe/js/notify.js"></script>
 <script>
-	notifyBrowser('Hello world!');
+    notifyBrowser('Hello world!');
 </script>
 ```
 
-2. in PHP
+### in PHP
 
 Autoload notifyMe class if necessary :
 
-```
+```php
 #!php
 $__autoload['notifyMe'] = $path_to_plugins.'/notifyMe/_admin.php';
 ```
 
 Call Notify() function :
 
-```
+```php
 #!php
 notifyMe::NotifyBrowser(msg[,title]);
 ```
-
 
 ## LICENCE
 
 GPL v2, fork and distribute it freely. You may pay me a 🍺 or even 🍻 if you find this plugin useful!
 
+## Known Issues
 
-## CHANGELOG
+- ⚡ autosave plugin will fire a notification at every save.
 
-0.1 - 2015/07/07 (not public release)
-
-- Initial packaging with new comments event
-
-0.2 - 2015/07/08 (first public release)
-
--  Add currently edited entry survey
-
-0.3 - 2015/07/09
-
-- Add per-notification activation
-- Do not notify on own comments/trackbacks (we presume that you know what you have juste done)
-
-0.3.1 - 2015/07/14
-
-- Avoid using same var's name as global's ones
-
-0.4 - 2015/09/27
-
-- Add a 4 seconds timeout for notification
-
-
-## KNONWS ISSUES
-
-- ⚡autosave plugin will fire a notification at every save.
-
-
-## IDEAS
+## Ideas
 
 May be implemented if necessary and asked for:
 

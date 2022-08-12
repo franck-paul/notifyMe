@@ -1,34 +1,33 @@
-/*global $, dotclear, notifyBrowser */
+/*global dotclear, notifyBrowser */
 'use strict';
 
 function checkNewComments() {
-  $.get('services.php', {
-    f: 'notifyMeCheckNewComments',
-    xd_check: dotclear.nonce,
-    last_id: dotclear.notify_me.comments.id,
-  })
-    .done(function (data) {
-      if ($('rsp[status=failed]', data).length > 0) {
-        // For debugging purpose only:
-        // console.log($('rsp',data).attr('message'));
-        window.console.log('Dotclear REST server error');
-      } else {
-        const new_comments = Number($('rsp>check', data).attr('ret'));
-        if (new_comments > 0) {
-          notifyBrowser($('rsp>check', data).attr('msg'), dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
-          dotclear.notify_me.comments.id = $('rsp>check', data).attr('last_id');
+  dotclear.services(
+    'notifyMeCheckNewComments',
+    (data) => {
+      const response = JSON.parse(data);
+      if (response?.success) {
+        if (Number(response?.payload.ret) > 0) {
+          notifyBrowser(response.payload.msg, dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
+          dotclear.notify_me.comments.id = response?.payload.last_id;
         }
+      } else {
+        console.log(dotclear.debug && response?.message ? response.message : 'Dotclear REST server error');
+        return;
       }
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-      window.console.log(`AJAX ${textStatus} (status: ${jqXHR.status} ${errorThrown})`);
-    })
-    .always(function () {
-      // Nothing here
-    });
+    },
+    (error) => {
+      console.log(error);
+    },
+    true, // Use GET method
+    {
+      json: 1, // Use JSON format for payload
+      last_id: dotclear.notify_me.comments.id,
+    },
+  );
 }
 
-$(function () {
+window.addEventListener('load', () => {
   dotclear.notify_me.comments = dotclear.getData('notify_me_comments');
   // Set interval between two checks for new comments
   setInterval(checkNewComments, dotclear.notify_me.comments.check);
