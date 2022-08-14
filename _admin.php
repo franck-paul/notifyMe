@@ -42,7 +42,7 @@ class notifyMeBehaviors
         ]);
     }
 
-    public static function adminPageNotificationError($core = null, $err)
+    public static function adminPageNotificationError($core, $err)
     {
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
@@ -59,7 +59,7 @@ class notifyMeBehaviors
         }
     }
 
-    public static function adminPageNotification($core = null, $notice)
+    public static function adminPageNotification($core, $notice)
     {
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
