@@ -87,7 +87,7 @@ class notifyMeBehaviors
         }
     }
 
-    public static function adminBeforeUserOptionsUpdate($cur, $userID)
+    public static function adminBeforeUserOptionsUpdate()
     {
         // Get and store user's prefs for plugin options
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
@@ -114,7 +114,7 @@ class notifyMeBehaviors
         }
     }
 
-    public static function adminPreferencesForm($core = null)
+    public static function adminPreferencesForm()
     {
         // Add fieldset for plugin options
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
@@ -230,7 +230,7 @@ class notifyMeBehaviors
                 // Not recorded
                 return;
             }
-            $media = new dcMedia(dcCore::app());
+            $media = new dcMedia();
             $rsm   = $media->getPostMedia($post_id);
             $hash  = notifyMeRest::hashPost($rs, $rsm);
             $dt    = $rs->post_upddt;

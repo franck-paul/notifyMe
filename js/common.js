@@ -5,15 +5,19 @@ function checkNewComments() {
   dotclear.services(
     'notifyMeCheckNewComments',
     (data) => {
-      const response = JSON.parse(data);
-      if (response?.success) {
-        if (Number(response?.payload.ret) > 0) {
-          notifyBrowser(response.payload.msg, dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
-          dotclear.notify_me.comments.id = response?.payload.last_id;
+      try {
+        const response = JSON.parse(data);
+        if (response?.success) {
+          if (Number(response?.payload.ret) > 0) {
+            notifyBrowser(response.payload.msg, dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
+            dotclear.notify_me.comments.id = response?.payload.last_id;
+          }
+        } else {
+          console.log(dotclear.debug && response?.message ? response.message : 'Dotclear REST server error');
+          return;
         }
-      } else {
-        console.log(dotclear.debug && response?.message ? response.message : 'Dotclear REST server error');
-        return;
+      } catch (e) {
+        console.log(e);
       }
     },
     (error) => {

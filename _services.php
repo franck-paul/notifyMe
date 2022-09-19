@@ -21,9 +21,9 @@ class notifyMeRest
      *
      * @param      array      $get    The cleaned $_GET
      *
-     * @return     JSON payload.
+     * @return     array   The payload.
      */
-    public static function checkNewComments($get)
+    public static function checkNewComments($get): array
     {
         $last_id         = !empty($get['last_id']) ? $get['last_id'] : -1;
         $last_comment_id = -1;
@@ -52,13 +52,11 @@ class notifyMeRest
             }
         }
 
-        $payload = [
+        return [
             'ret'     => $count,
             'msg'     => sprintf(__('One new comment has been posted', '%s new comments have been posted', $count), $count),
             'suggest' => $last_comment_id,
         ];
-
-        return $payload;
     }
 
     /**
@@ -68,9 +66,9 @@ class notifyMeRest
      *
      * @throws     Exception
      *
-     * @return     JSON payload.
+     * @return     array   The payload.
      */
-    public static function checkCurrentPost($get)
+    public static function checkCurrentPost($get): array
     {
         if (empty($get['post_id'])) {
             throw new Exception('No post ID');
@@ -96,7 +94,7 @@ class notifyMeRest
 
         $rs = dcCore::app()->blog->getPosts($sqlp);
         if (!$rs->isEmpty()) {
-            $media = new dcMedia(dcCore::app());
+            $media = new dcMedia();
             $rsm   = $media->getPostMedia($rs->post_id);
             $hash  = self::hashPost($rs, $rsm);
             if ($hash !== $get['post_hash']) {

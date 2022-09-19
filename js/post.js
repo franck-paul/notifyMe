@@ -5,15 +5,19 @@ function checkCurrentPost() {
   dotclear.services(
     'notifyMeCheckCurrentPost',
     (data) => {
-      const response = JSON.parse(data);
-      if (response?.success) {
-        if (response?.payload.ret === 'dirty') {
-          notifyBrowser(response.payload.msg, dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
-          dotclear.notify_me.post.dt = response?.payload.post_dt;
+      try {
+        const response = JSON.parse(data);
+        if (response?.success) {
+          if (response?.payload.ret === 'dirty') {
+            notifyBrowser(response.payload.msg, dotclear.notify_me.config.title, dotclear.notify_me.config.wait);
+            dotclear.notify_me.post.dt = response?.payload.post_dt;
+          }
+        } else {
+          console.log(dotclear.debug && response?.message ? response.message : 'Dotclear REST server error');
+          return;
         }
-      } else {
-        console.log(dotclear.debug && response?.message ? response.message : 'Dotclear REST server error');
-        return;
+      } catch (e) {
+        console.log(e);
       }
     },
     (error) => {
