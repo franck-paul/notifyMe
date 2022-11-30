@@ -22,7 +22,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 // Admin mode
 
-$__autoload['notifyMeRest'] = __DIR__ . '/_services.php';
+Clearbricks::lib()->autoload(['notifyMeRest' => __DIR__ . '/_services.php']);
 
-dcCore::app()->rest->addFunction('notifyMeCheckNewComments', ['notifyMeRest', 'checkNewComments']);
-dcCore::app()->rest->addFunction('notifyMeCheckCurrentPost', ['notifyMeRest', 'checkCurrentPost']);
+dcCore::app()->rest->addFunction('notifyMeCheckNewComments', [notifyMeRest::class, 'checkNewComments']);
+dcCore::app()->rest->addFunction('notifyMeCheckCurrentPost', [notifyMeRest::class, 'checkCurrentPost']);

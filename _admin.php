@@ -17,20 +17,6 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 // dead but useful code, in order to have translations
 __('Browser notifications') . __('Display notifications in your web browser');
 
-dcCore::app()->addBehavior('adminBeforeUserOptionsUpdate', ['notifyMeBehaviors', 'adminBeforeUserOptionsUpdate']);
-dcCore::app()->addBehavior('adminPreferencesForm', ['notifyMeBehaviors', 'adminPreferencesForm']);
-
-// On all admin pages
-dcCore::app()->addBehavior('adminPageHTMLHead', ['notifyMeBehaviors', 'adminPageHTMLHead']);
-
-// On post and page editing mode
-dcCore::app()->addBehavior('adminPostHeaders', ['notifyMeBehaviors', 'adminPostHeaders']);
-dcCore::app()->addBehavior('adminPageHeaders', ['notifyMeBehaviors', 'adminPostHeaders']);
-
-// Transform error and standard DC notices to notifications
-dcCore::app()->addBehavior('adminPageNotificationError', ['notifyMeBehaviors', 'adminPageNotificationError']);
-dcCore::app()->addBehavior('adminPageNotification', ['notifyMeBehaviors', 'adminPageNotification']);
-
 class notifyMeBehaviors
 {
     private static function NotifyBrowser($message, $title = 'Dotclear', $silent = false)
@@ -47,7 +33,6 @@ class notifyMeBehaviors
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
             if (dcCore::app()->auth->user_prefs->notifyMe->system && dcCore::app()->auth->user_prefs->notifyMe->system_error) {
-
                 // Set notification title
                 $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name) . __(' - error');
 
@@ -166,7 +151,6 @@ class notifyMeBehaviors
     {
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
-
             // Set notification title
             $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name);
 
@@ -180,10 +164,10 @@ class notifyMeBehaviors
 
             if (dcCore::app()->auth->user_prefs->notifyMe->new_comments_on) {
                 $sqlp = [
-                    'limit'              => 1,                 // only the last one
-                    'no_content'         => true,              // content is not required
-                    'comment_status_not' => -2,                // ignore spam
-                    'order'              => 'comment_id DESC', // get last first
+                    'limit'              => 1,                      // only the last one
+                    'no_content'         => true,                   // content is not required
+                    'comment_status_not' => dcBlog::COMMENT_JUNK,   // ignore spam
+                    'order'              => 'comment_id DESC',      // get last first
                 ];
 
                 $email = dcCore::app()->auth->getInfo('user_email');
@@ -220,18 +204,16 @@ class notifyMeBehaviors
 
     public static function adminPostHeaders()
     {
-        global $post_id;
-
         dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
-        if (dcCore::app()->auth->user_prefs->notifyMe->active && dcCore::app()->auth->user_prefs->notifyMe->current_post_on && $post_id) {
-            $sqlp = ['post_id' => $post_id];
+        if (dcCore::app()->auth->user_prefs->notifyMe->active && dcCore::app()->auth->user_prefs->notifyMe->current_post_on && dcCore::app()->admin->post_id) {
+            $sqlp = ['post_id' => dcCore::app()->admin->post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = dcCore::app()->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {
                 // Not recorded
                 return;
             }
             $media = new dcMedia();
-            $rsm   = $media->getPostMedia($post_id);
+            $rsm   = $media->getPostMedia(dcCore::app()->admin->post_id);
             $hash  = notifyMeRest::hashPost($rs, $rsm);
             $dt    = $rs->post_upddt;
 
@@ -244,7 +226,7 @@ class notifyMeBehaviors
             return
             dcPage::jsJson('notify_me_post', [
                 'check' => $interval * 1000,
-                'id'    => $post_id,
+                'id'    => dcCore::app()->admin->post_id,
                 'hash'  => $hash,
                 'dt'    => $dt,
             ]) .
@@ -264,3 +246,17 @@ class notifyMe
         ]);
     }
 }
+
+dcCore::app()->addBehavior('adminBeforeUserOptionsUpdate', [notifyMeBehaviors::class, 'adminBeforeUserOptionsUpdate']);
+dcCore::app()->addBehavior('adminPreferencesFormV2', [notifyMeBehaviors::class, 'adminPreferencesForm']);
+
+// On all admin pages
+dcCore::app()->addBehavior('adminPageHTMLHead', [notifyMeBehaviors::class, 'adminPageHTMLHead']);
+
+// On post and page editing mode
+dcCore::app()->addBehavior('adminPostHeaders', [notifyMeBehaviors::class, 'adminPostHeaders']);
+dcCore::app()->addBehavior('adminPageHeaders', [notifyMeBehaviors::class, 'adminPostHeaders']);
+
+// Transform error and standard DC notices to notifications
+dcCore::app()->addBehavior('adminPageNotificationError', [notifyMeBehaviors::class, 'adminPageNotificationError']);
+dcCore::app()->addBehavior('adminPageNotification', [notifyMeBehaviors::class, 'adminPageNotification']);

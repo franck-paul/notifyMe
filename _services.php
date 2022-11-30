@@ -29,8 +29,8 @@ class notifyMeRest
         $last_comment_id = -1;
 
         $sqlp = [
-            'no_content'         => true, // content is not required
-            'comment_status_not' => -2,   // ignore spam
+            'no_content'         => true,                   // content is not required
+            'comment_status_not' => dcBlog::COMMENT_JUNK,   // ignore spam
             'order'              => 'comment_id ASC',
 
             'sql' => 'AND comment_id > ' . $last_id, // only new ones

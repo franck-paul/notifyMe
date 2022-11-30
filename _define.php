@@ -15,20 +15,23 @@ if (!defined('DC_RC_PATH')) {
 }
 
 $this->registerModule(
-    'Browser notifications',                     // Name
-    'Display notifications in your web browser', // Description
-    'Franck Paul and contributors',              // Author
-    '0.9.1',
+    'Browser notifications',
+    'Display notifications in your web browser',
+    'Franck Paul and contributors',
+    '1.0',
     [
-        'requires'    => [['core', '2.24']],                        // Dependencies
-        'permissions' => 'usage,contentadmin',                      // Permissions
-        'type'        => 'plugin',                                  // Type
-        'settings'    => [                                          // Settings
+        'requires'    => [['core', '2.24']],
+        'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_USAGE,
+            dcAuth::PERMISSION_CONTENT_ADMIN,
+        ]),
+        'type'     => 'plugin',
+        'settings' => [
             'pref' => '#user-options.notify-me',
         ],
 
-        'details'    => 'https://open-time.net/?q=notifyMe',       // Details URL
-        'support'    => 'https://github.com/franck-paul/notifyMe', // Support URL
+        'details'    => 'https://open-time.net/?q=notifyMe',
+        'support'    => 'https://github.com/franck-paul/notifyMe',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/notifyMe/master/dcstore.xml',
     ]
 );
