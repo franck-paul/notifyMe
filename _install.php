@@ -14,16 +14,12 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return;
 }
 
-$new_version = dcCore::app()->plugins->moduleInfo('notifyMe', 'version');
-$old_version = dcCore::app()->getVersion('notifyMe');
-
-if (version_compare((string) $old_version, $new_version, '>=')) {
+if (!dcCore::app()->newVersion(basename(__DIR__), dcCore::app()->plugins->moduleInfo(basename(__DIR__), 'version'))) {
     return;
 }
 
 try {
     // Default user settings
-    dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
 
     if (!dcCore::app()->auth->user_prefs->notifyMe->prefExists('active')) {
         dcCore::app()->auth->user_prefs->notifyMe->put('active', false, 'boolean', 'Active');
@@ -80,8 +76,6 @@ try {
             'Interval in seconds betwwen current edited post checking'
         );
     }
-
-    dcCore::app()->setVersion('notifyMe', $new_version);
 
     return true;
 } catch (Exception $e) {
