@@ -31,7 +31,7 @@ Autoload notifyMe class if necessary :
 
 ```php
 #!php
-$__autoload['notifyMe'] = $path_to_plugins.'/notifyMe/_admin.php';
+Clearbricks::lib()->autoload(['notifyMe' => $path_to_plugins.'/notifyMe/_admin.php']);
 ```
 
 Call Notify() function :

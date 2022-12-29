@@ -30,7 +30,6 @@ class notifyMeBehaviors
 
     public static function adminPageNotificationError($core, $err)
     {
-        dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
             if (dcCore::app()->auth->user_prefs->notifyMe->system && dcCore::app()->auth->user_prefs->notifyMe->system_error) {
                 // Set notification title
@@ -46,7 +45,6 @@ class notifyMeBehaviors
 
     public static function adminPageNotification($core, $notice)
     {
-        dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
             if (dcCore::app()->auth->user_prefs->notifyMe->system) {
                 $type = [
@@ -75,8 +73,6 @@ class notifyMeBehaviors
     public static function adminBeforeUserOptionsUpdate()
     {
         // Get and store user's prefs for plugin options
-        dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
-
         try {
             $notifyMe_newcomments = (int) $_POST['notifyMe_new_comments'];
             if ($notifyMe_newcomments < 1) {
@@ -102,7 +98,6 @@ class notifyMeBehaviors
     public static function adminPreferencesForm()
     {
         // Add fieldset for plugin options
-        dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
 
         echo
         '<div class="fieldset" id="notify-me"><h5>' . __('Browser notifications') . '</h5>' .
@@ -149,7 +144,6 @@ class notifyMeBehaviors
 
     public static function adminPageHTMLHead()
     {
-        dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active) {
             // Set notification title
             $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name);
@@ -204,7 +198,6 @@ class notifyMeBehaviors
 
     public static function adminPostHeaders()
     {
-        dcCore::app()->auth->user_prefs->addWorkspace('notifyMe');
         if (dcCore::app()->auth->user_prefs->notifyMe->active && dcCore::app()->auth->user_prefs->notifyMe->current_post_on && dcCore::app()->admin->post_id) {
             $sqlp = ['post_id' => dcCore::app()->admin->post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = dcCore::app()->blog->getPosts($sqlp);
@@ -247,16 +240,18 @@ class notifyMe
     }
 }
 
-dcCore::app()->addBehavior('adminBeforeUserOptionsUpdate', [notifyMeBehaviors::class, 'adminBeforeUserOptionsUpdate']);
-dcCore::app()->addBehavior('adminPreferencesFormV2', [notifyMeBehaviors::class, 'adminPreferencesForm']);
+dcCore::app()->addBehaviors([
+    'adminBeforeUserOptionsUpdate' => [notifyMeBehaviors::class, 'adminBeforeUserOptionsUpdate'],
+    'adminPreferencesFormV2'       => [notifyMeBehaviors::class, 'adminPreferencesForm'],
 
-// On all admin pages
-dcCore::app()->addBehavior('adminPageHTMLHead', [notifyMeBehaviors::class, 'adminPageHTMLHead']);
+    // On all admin pages
+    'adminPageHTMLHead'            => [notifyMeBehaviors::class, 'adminPageHTMLHead'],
 
-// On post and page editing mode
-dcCore::app()->addBehavior('adminPostHeaders', [notifyMeBehaviors::class, 'adminPostHeaders']);
-dcCore::app()->addBehavior('adminPageHeaders', [notifyMeBehaviors::class, 'adminPostHeaders']);
+    // On post and page editing mode
+    'adminPostHeaders'             => [notifyMeBehaviors::class, 'adminPostHeaders'],
+    'adminPageHeaders'             => [notifyMeBehaviors::class, 'adminPostHeaders'],
 
-// Transform error and standard DC notices to notifications
-dcCore::app()->addBehavior('adminPageNotificationError', [notifyMeBehaviors::class, 'adminPageNotificationError']);
-dcCore::app()->addBehavior('adminPageNotification', [notifyMeBehaviors::class, 'adminPageNotification']);
+    // Transform error and standard DC notices to notifications
+    'adminPageNotificationError'   => [notifyMeBehaviors::class, 'adminPageNotificationError'],
+    'adminPageNotification'        => [notifyMeBehaviors::class, 'adminPageNotification'],
+]);
