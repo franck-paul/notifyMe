@@ -10,14 +10,25 @@
  * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return;
-}
+declare(strict_types=1);
 
-// dead but useful code, in order to have translations
-__('Browser notifications') . __('Display notifications in your web browser');
+namespace Dotclear\Plugin\notifyMe;
 
-class notifyMeBehaviors
+use dcBlog;
+use dcCore;
+use dcMedia;
+use dcPage;
+use Dotclear\Helper\Html\Form\Checkbox;
+use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Fieldset;
+use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Legend;
+use Dotclear\Helper\Html\Form\Number;
+use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Text;
+use Exception;
+
+class BackendBehaviors
 {
     private static function NotifyBrowser($message, $title = 'Dotclear', $silent = false)
     {
@@ -98,48 +109,70 @@ class notifyMeBehaviors
     public static function adminPreferencesForm()
     {
         // Add fieldset for plugin options
-
         echo
-        '<div class="fieldset" id="notify-me"><h5>' . __('Browser notifications') . '</h5>' .
-
-        '<div class="two-boxes">' .
-        '<p><label for="notifyMe_active" class="classic">' .
-        form::checkbox('notifyMe_active', 1, dcCore::app()->auth->user_prefs->notifyMe->active) . ' ' .
-        __('Display browser notification') . '</label></p>' .
-
-        '<p class="form-note">' . __('The notifications will have to be explicitly granted for the current session before displaying the first one.') . '</p>' .
-
-        '<p><label for="notifyMe_wait" class="classic">' .
-        form::checkbox('notifyMe_wait', 1, dcCore::app()->auth->user_prefs->notifyMe->wait) . ' ' .
-        __('Wait for user interaction before closing notification') . '</label></p>' .
-
-        '</div><div class="two-boxes">' .
-
-        '<p><label for="notifyMe_system" class="classic">' .
-        form::checkbox('notifyMe_system', 1, dcCore::app()->auth->user_prefs->notifyMe->system) . ' ' .
-        __('Replace Dotclear notifications') . '</label></p>' .
-
-        '<p><label for="notifyMe_system_error" class="classic">' .
-        form::checkbox('notifyMe_system_error', 1, dcCore::app()->auth->user_prefs->notifyMe->system_error) . ' ' .
-        __('Including Dotclear errors') . '</label></p>' .
-
-        '</div>' .
-        '<hr />' .
-        '<h5>' . __('Notifications:') . '</h5>' .
-
-        '<p><label for="notifyMe_new_comments" class="classic">' .
-        form::checkbox('notifyMe_new_comments_on', 1, dcCore::app()->auth->user_prefs->notifyMe->new_comments_on) . ' ' .
-        __('Check new comments every (in seconds, default: 30):') . ' ' .
-        form::field('notifyMe_new_comments', 5, 4, (int) dcCore::app()->auth->user_prefs->notifyMe->new_comments) . '</label></p>' .
-
-        '<p class="form-note">' . __('Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored.') . '</p>' .
-
-        '<p><label for="notifyMe_current_post" class="classic">' .
-        form::checkbox('notifyMe_current_post_on', 1, dcCore::app()->auth->user_prefs->notifyMe->current_post_on) . ' ' .
-        __('Check current edited post every (in seconds, default: 60):') . ' ' .
-        form::field('notifyMe_current_post', 5, 4, (int) dcCore::app()->auth->user_prefs->notifyMe->current_post) . '</label></p>' .
-
-            '</div>';
+        (new Fieldset('notify-me'))
+        ->legend((new Legend(__('Browser notifications'))))
+        ->fields([
+            (new Div())->class('two-boxes')->items([
+                (new Para())->items([
+                    (new Checkbox('notifyMe_active', dcCore::app()->auth->user_prefs->notifyMe->active))
+                        ->value(1)
+                        ->label((new Label(__('Display browser notification'), Label::INSIDE_TEXT_AFTER))),
+                ]),
+                (new Para())->items([
+                    (new Text(null, __('The notifications will have to be explicitly granted for the current session before displaying the first one.')))
+                        ->class(['clear', 'form-note']),
+                ]),
+                (new Para())->items([
+                    (new Checkbox('notifyMe_wait', dcCore::app()->auth->user_prefs->notifyMe->wait))
+                        ->value(1)
+                        ->label((new Label(__('Wait for user interaction before closing notification'), Label::INSIDE_TEXT_AFTER))),
+                ]),
+            ]),
+            (new Div())->class('two-boxes')->items([
+                (new Para())->items([
+                    (new Checkbox('notifyMe_system', dcCore::app()->auth->user_prefs->notifyMe->system))
+                        ->value(1)
+                        ->label((new Label(__('Replace Dotclear notifications'), Label::INSIDE_TEXT_AFTER))),
+                ]),
+                (new Para())->items([
+                    (new Checkbox('notifyMe_system_error', dcCore::app()->auth->user_prefs->notifyMe->system_error))
+                        ->value(1)
+                        ->label((new Label(__('Including Dotclear errors'), Label::INSIDE_TEXT_AFTER))),
+                ]),
+            ]),
+            (new Text(null, '<hr />')),
+            (new Text('h5', __('Notifications:'))),
+            (new Div())->class('two-boxes')->items([
+                (new Para())->items([
+                    (new Checkbox('notifyMe_new_comments_on', dcCore::app()->auth->user_prefs->notifyMe->new_comments_on))
+                        ->value(1)
+                        ->label((new Label(__('Check new comments'), Label::INSIDE_TEXT_AFTER))),
+                ]),
+                (new Para())->items([
+                    (new Text(null, __('Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored.')))
+                        ->class(['clear', 'form-note']),
+                ]),
+                (new Para())->items([
+                    (new Number('notifyMe_new_comments', 0, 3600, (int) dcCore::app()->auth->user_prefs->notifyMe->new_comments))
+                        ->default(30)
+                        ->label((new Label(__('Check new comments every (in seconds, default: 30):'), Label::INSIDE_TEXT_BEFORE))),
+                ]),
+            ]),
+            (new Div())->class('two-boxes')->items([
+                (new Para())->items([
+                    (new Checkbox('notifyMe_current_post_on', dcCore::app()->auth->user_prefs->notifyMe->current_post_on))
+                        ->value(1)
+                        ->label((new Label(__('Check current edited post'), Label::INSIDE_TEXT_AFTER))),
+                ]),
+                (new Para())->items([
+                    (new Number('notifyMe_current_post', 0, 3600, (int) dcCore::app()->auth->user_prefs->notifyMe->current_post))
+                        ->default(60)
+                        ->label((new Label(__('Check current edited post every (in seconds, default: 60):'), Label::INSIDE_TEXT_BEFORE))),
+                ]),
+            ]),
+        ])
+        ->render();
     }
 
     public static function adminPageHTMLHead()
@@ -207,7 +240,7 @@ class notifyMeBehaviors
             }
             $media = new dcMedia();
             $rsm   = $media->getPostMedia(dcCore::app()->admin->post_id);
-            $hash  = notifyMeRest::hashPost($rs, $rsm);
+            $hash  = BackendRest::hashPost($rs, $rsm);
             $dt    = $rs->post_upddt;
 
             // Get interval between two check
@@ -227,31 +260,3 @@ class notifyMeBehaviors
         }
     }
 }
-
-class notifyMe
-{
-    public static function NotifyBrowser($message, $title = 'Dotclear')
-    {
-        return dcPage::jsJson('notify_me_msg_' . time(), [
-            'message' => str_replace("\n", '. ', $message),
-            'title'   => $title,
-            'silent'  => false,
-        ]);
-    }
-}
-
-dcCore::app()->addBehaviors([
-    'adminBeforeUserOptionsUpdate' => [notifyMeBehaviors::class, 'adminBeforeUserOptionsUpdate'],
-    'adminPreferencesFormV2'       => [notifyMeBehaviors::class, 'adminPreferencesForm'],
-
-    // On all admin pages
-    'adminPageHTMLHead'            => [notifyMeBehaviors::class, 'adminPageHTMLHead'],
-
-    // On post and page editing mode
-    'adminPostHeaders'             => [notifyMeBehaviors::class, 'adminPostHeaders'],
-    'adminPageHeaders'             => [notifyMeBehaviors::class, 'adminPostHeaders'],
-
-    // Transform error and standard DC notices to notifications
-    'adminPageNotificationError'   => [notifyMeBehaviors::class, 'adminPageNotificationError'],
-    'adminPageNotification'        => [notifyMeBehaviors::class, 'adminPageNotification'],
-]);

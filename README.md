@@ -1,5 +1,12 @@
 # Plugin notifyMe for Dotclear 2
 
+[![Release](https://img.shields.io/github/v/release/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/releases)
+[![Date](https://img.shields.io/github/release-date/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/releases)
+[![Issues](https://img.shields.io/github/issues/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/issues)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.24-blue.svg)](https://fr.dotclear.org/download)
+[![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/notifyMe)
+[![License](https://img.shields.io/github/license/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/blob/master/LICENSE)
+
 ![Notification sample](http://open-time.net/public/screenshots/2015/notify-me-display.jpg)
 
 This plugin display notification in your admin' pages when new comments/trackbacks are posted on the currently selected blog, or if the currently edited post (or page) has been modified elsewhere (other browser, machine, user, …).
@@ -16,6 +23,8 @@ How to display browser notification using this plugin.
 
 ### in Javascript
 
+## Legacy way
+
 Load (if necessary) /js/notify.js, and call notifyBrowser(msg[,title]):
 
 ```html
@@ -25,20 +34,30 @@ Load (if necessary) /js/notify.js, and call notifyBrowser(msg[,title]):
 </script>
 ```
 
-### in PHP
+## Using module
 
-Autoload notifyMe class if necessary :
-
-```php
-#!php
-Clearbricks::lib()->autoload(['notifyMe' => $path_to_plugins.'/notifyMe/_admin.php']);
+```html
+<script>
+    import { notifyBrowser } from './index.php?pf=notifyMe/js/notify.mjs';
+    notifyBrowser('Hello world!');
+</script>
 ```
 
-Call Notify() function :
+Or:
+
+```html
+<script>
+    const notifyMe = import('./index.php?pf=notifyMe/js/notify.mjs');
+    notifyMe.notifyBrowser('Hello world!');
+</script>
+```
+
+### in PHP
 
 ```php
 #!php
-notifyMe::NotifyBrowser(msg[,title]);
+use Dotclear\Plugin\notifyMe\Helper as NotifyMe;
+NotifyMe::NotifyBrowser(msg[,title]);
 ```
 
 ## LICENCE
@@ -48,10 +67,3 @@ GPL v2, fork and distribute it freely. You may pay me a 🍺 or even 🍻 if you
 ## Known Issues
 
 - ⚡ autosave plugin will fire a notification at every save.
-
-## Ideas
-
-May be implemented if necessary and asked for:
-
-- Publication of programmed posts : "N programmed post(s) has/have been published".
-- Incorrect user login (for super-admin) : "Incorrect login occurs."

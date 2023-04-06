@@ -10,11 +10,16 @@
  * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return;
-}
+declare(strict_types=1);
 
-class notifyMeRest
+namespace Dotclear\Plugin\notifyMe;
+
+use dcBlog;
+use dcCore;
+use dcMedia;
+use Exception;
+
+class BackendRest
 {
     /**
      * Serve method to check new comments for current blog.
