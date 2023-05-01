@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 notifyMe module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-17 18:51+0100\n"
+"POT-Creation-Date: 2023-05-01 21:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,67 +17,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../hg-plugins/notifyMe/_admin.php:15 ../hg-plugins/notifyMe/_admin.php:128
+#: ../git-plugins/notifyMe/src/Backend.php:27
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:114
 msgid "Browser notifications"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:15
+#: ../git-plugins/notifyMe/src/Backend.php:27
 msgid "Display notifications in your web browser"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:52 ../hg-plugins/notifyMe/_admin.php:73
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:47
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:64
 msgid " - error"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:52 ../hg-plugins/notifyMe/_admin.php:76
-#: ../hg-plugins/notifyMe/_admin.php:174 ../hg-plugins/notifyMe/_admin.php:245
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:47
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:67
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:182
 #, php-format
 msgid "Dotclear : %s"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:72
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:63
 msgid " - warning"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:133
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:120
 msgid "Display browser notification"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:135
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:123
 msgid "The notifications will have to be explicitly granted for the current session before displaying the first one."
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:141
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:129
+msgid "Wait for user interaction before closing notification"
+msgstr ""
+
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:136
 msgid "Replace Dotclear notifications"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:145
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:141
 msgid "Including Dotclear errors"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:149
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:145
 msgid "Notifications:"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:153
-msgid "Check new comments every (in seconds, default: 30):"
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:150
+msgid "Check new comments"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:156
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:153
 msgid "Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored."
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_admin.php:160
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:159
+msgid "Check new comments every (in seconds, default: 30):"
+msgstr ""
+
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:166
+msgid "Check current edited post"
+msgstr ""
+
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:171
 msgid "Check current edited post every (in seconds, default: 60):"
 msgstr ""
 
-#: ../hg-plugins/notifyMe/_services.php:56
+#: ../git-plugins/notifyMe/src/BackendRest.php:62
 #, php-format
 msgid "One new comment has been posted"
 msgid_plural "%s new comments have been posted"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../hg-plugins/notifyMe/_services.php:110
+#: ../git-plugins/notifyMe/src/BackendRest.php:111
 msgid "Warning: The current entry has been changed elsewhere!"
 msgstr ""

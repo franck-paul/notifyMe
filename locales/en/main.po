@@ -15,62 +15,62 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 msgid "Browser notifications"
-msgstr "Notifications dans le navigateur"
+msgstr ""
 
 msgid "Display notifications in your web browser"
-msgstr "Affiche des notifications dans votre navigateur"
+msgstr ""
 
 msgid " - error"
-msgstr " - erreur"
+msgstr ""
 
 #, php-format
 msgid "Dotclear : %s"
-msgstr "Dotclear : %s"
+msgstr ""
 
 msgid " - warning"
-msgstr " - attention"
+msgstr ""
 
 msgid "Display browser notification"
-msgstr "Affiche des notifications dans votre navigateur"
+msgstr ""
 
 msgid "The notifications will have to be explicitly granted for the current session before displaying the first one."
-msgstr "Les notifications devront être explicitement autorisées pour la session courante avant l'affichage de la première."
+msgstr ""
 
 msgid "Wait for user interaction before closing notification"
-msgstr "Attendre une action de l'utilisateur avant de fermer la notification"
+msgstr ""
 
 msgid "Replace Dotclear notifications"
-msgstr "Remplace les notifications Dotclear"
+msgstr ""
 
 msgid "Including Dotclear errors"
-msgstr "Y compris les erreurs Dotclear"
+msgstr ""
 
 msgid "Notifications:"
-msgstr "Notifications :"
+msgstr ""
 
 msgid "Check new comments"
 msgstr ""
 
 msgid "Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored."
-msgstr "Seuls les nouveaux commentaires non indésirables du blog courant seront contrôlés, qu'ils soient modérés a priori ou a posteriori. Vos propres commentaires et rétroliens seront ignorés."
+msgstr ""
 
 msgid "Check new comments every (in seconds, default: 30):"
-msgstr "Contrôler les nouveaux commentaires toutes les (en secondes, 30 par défaut) :"
+msgstr ""
 
-#, fuzzy
 msgid "Check current edited post"
-msgstr "Contrôler la publication en cours d'édition toutes les (en secondes, 60 par défaut) :"
+msgstr ""
 
 msgid "Check current edited post every (in seconds, default: 60):"
-msgstr "Contrôler la publication en cours d'édition toutes les (en secondes, 60 par défaut) :"
+msgstr ""
 
 #, php-format
 msgid "One new comment has been posted"
 msgid_plural "%s new comments have been posted"
-msgstr[0] "Un nouveau commentaire à été posté"
-msgstr[1] "%s nouveaux commentaires ont été postés"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Warning: The current entry has been changed elsewhere!"
-msgstr "Attention: La publication en cours d'édition a été modifiée par ailleurs !"
+msgstr ""
