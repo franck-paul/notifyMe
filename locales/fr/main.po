@@ -51,7 +51,7 @@ msgid "Notifications:"
 msgstr "Notifications :"
 
 msgid "Check new comments"
-msgstr ""
+msgstr "Vérifier les nouveaux commentaires"
 
 msgid "Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored."
 msgstr "Seuls les nouveaux commentaires non indésirables du blog courant seront contrôlés, qu'ils soient modérés a priori ou a posteriori. Vos propres commentaires et rétroliens seront ignorés."
@@ -59,9 +59,8 @@ msgstr "Seuls les nouveaux commentaires non indésirables du blog courant seront
 msgid "Check new comments every (in seconds, default: 30):"
 msgstr "Contrôler les nouveaux commentaires toutes les (en secondes, 30 par défaut) :"
 
-#, fuzzy
 msgid "Check current edited post"
-msgstr "Contrôler la publication en cours d'édition toutes les (en secondes, 60 par défaut) :"
+msgstr "Contrôler la publication en cours d'édition"
 
 msgid "Check current edited post every (in seconds, default: 60):"
 msgstr "Contrôler la publication en cours d'édition toutes les (en secondes, 60 par défaut) :"
