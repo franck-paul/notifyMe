@@ -14,7 +14,7 @@ $this->registerModule(
     'Browser notifications',
     'Display notifications in your web browser',
     'Franck Paul and contributors',
-    '1.2',
+    '2.0',
     [
         'requires'    => [['core', '2.26']],
         'permissions' => dcCore::app()->auth->makePermissions([
