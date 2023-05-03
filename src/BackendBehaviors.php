@@ -239,7 +239,7 @@ class BackendBehaviors
                 return;
             }
             $media = new dcMedia();
-            $rsm   = $media->getPostMedia(dcCore::app()->admin->post_id);
+            $rsm   = $media->getPostMedia((int) dcCore::app()->admin->post_id);
             $hash  = BackendRest::hashPost($rs, $rsm);
             $dt    = $rs->post_upddt;
 
