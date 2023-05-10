@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 notifyMe module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 21:25+0200\n"
+"POT-Creation-Date: 2023-05-10 19:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: ../git-plugins/notifyMe/src/Backend.php:27
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:114
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:120
 msgid "Browser notifications"
 msgstr ""
 
@@ -26,63 +26,63 @@ msgstr ""
 msgid "Display notifications in your web browser"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:47
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:64
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:48
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:66
 msgid " - error"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:47
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:67
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:182
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:48
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:69
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:190
 #, php-format
 msgid "Dotclear : %s"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:63
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:65
 msgid " - warning"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:120
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:126
 msgid "Display browser notification"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:123
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:129
 msgid "The notifications will have to be explicitly granted for the current session before displaying the first one."
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:129
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:135
 msgid "Wait for user interaction before closing notification"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:136
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:142
 msgid "Replace Dotclear notifications"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:141
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:147
 msgid "Including Dotclear errors"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:145
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:151
 msgid "Notifications:"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:150
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:156
 msgid "Check new comments"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:153
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:159
 msgid "Only new non-junk comments for the current blog will be checked, whatever is the moderation setting. Your own comments or trackbacks will be ignored."
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:159
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:165
 msgid "Check new comments every (in seconds, default: 30):"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:166
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:172
 msgid "Check current edited post"
 msgstr ""
 
-#: ../git-plugins/notifyMe/src/BackendBehaviors.php:171
+#: ../git-plugins/notifyMe/src/BackendBehaviors.php:177
 msgid "Check current edited post every (in seconds, default: 60):"
 msgstr ""
 

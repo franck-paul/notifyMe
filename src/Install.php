@@ -22,9 +22,7 @@ class Install extends dcNsProcess
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && My::phpCompliant()
-            && dcCore::app()->newVersion(My::id(), dcCore::app()->plugins->moduleInfo(My::id(), 'version'));
+        static::$init = My::checkContext(My::INSTALL);
 
         return static::$init;
     }
@@ -36,7 +34,7 @@ class Install extends dcNsProcess
         }
 
         try {
-            $settings = dcCore::app()->auth->user_prefs->notifyMe;
+            $settings = dcCore::app()->auth->user_prefs->get(My::id());
 
             if (!$settings->prefExists('active')) {
                 $settings->put(
@@ -98,8 +96,6 @@ class Install extends dcNsProcess
                     'Interval in seconds betwwen current edited post checking'
                 );
             }
-
-            return true;
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }

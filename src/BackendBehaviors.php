@@ -41,8 +41,9 @@ class BackendBehaviors
 
     public static function adminPageNotificationError($core, $err)
     {
-        if (dcCore::app()->auth->user_prefs->notifyMe->active) {
-            if (dcCore::app()->auth->user_prefs->notifyMe->system && dcCore::app()->auth->user_prefs->notifyMe->system_error) {
+        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        if ($settings->active) {
+            if ($settings->system && $settings->system_error) {
                 // Set notification title
                 $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name) . __(' - error');
 
@@ -56,8 +57,9 @@ class BackendBehaviors
 
     public static function adminPageNotification($core, $notice)
     {
-        if (dcCore::app()->auth->user_prefs->notifyMe->active) {
-            if (dcCore::app()->auth->user_prefs->notifyMe->system) {
+        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        if ($settings->active) {
+            if ($settings->system) {
                 $type = [
                     'success' => '',
                     'warning' => __(' - warning'),
@@ -84,6 +86,8 @@ class BackendBehaviors
     public static function adminBeforeUserOptionsUpdate()
     {
         // Get and store user's prefs for plugin options
+        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+
         try {
             $notifyMe_newcomments = (int) $_POST['notifyMe_new_comments'];
             if ($notifyMe_newcomments < 1) {
@@ -93,14 +97,14 @@ class BackendBehaviors
             if ($notifyMe_currentpost < 1) {
                 $notifyMe_currentpost = 60; // seconds
             }
-            dcCore::app()->auth->user_prefs->notifyMe->put('active', !empty($_POST['notifyMe_active']), 'boolean');
-            dcCore::app()->auth->user_prefs->notifyMe->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
-            dcCore::app()->auth->user_prefs->notifyMe->put('system', !empty($_POST['notifyMe_system']), 'boolean');
-            dcCore::app()->auth->user_prefs->notifyMe->put('system_error', !empty($_POST['notifyMe_system_error']), 'boolean');
-            dcCore::app()->auth->user_prefs->notifyMe->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), 'boolean');
-            dcCore::app()->auth->user_prefs->notifyMe->put('new_comments', $notifyMe_newcomments);
-            dcCore::app()->auth->user_prefs->notifyMe->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), 'boolean');
-            dcCore::app()->auth->user_prefs->notifyMe->put('current_post', $notifyMe_currentpost);
+            $settings->put('active', !empty($_POST['notifyMe_active']), 'boolean');
+            $settings->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
+            $settings->put('system', !empty($_POST['notifyMe_system']), 'boolean');
+            $settings->put('system_error', !empty($_POST['notifyMe_system_error']), 'boolean');
+            $settings->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), 'boolean');
+            $settings->put('new_comments', $notifyMe_newcomments);
+            $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), 'boolean');
+            $settings->put('current_post', $notifyMe_currentpost);
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
@@ -108,6 +112,8 @@ class BackendBehaviors
 
     public static function adminPreferencesForm()
     {
+        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+
         // Add fieldset for plugin options
         echo
         (new Fieldset('notify-me'))
@@ -115,7 +121,7 @@ class BackendBehaviors
         ->fields([
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_active', dcCore::app()->auth->user_prefs->notifyMe->active))
+                    (new Checkbox('notifyMe_active', $settings->active))
                         ->value(1)
                         ->label((new Label(__('Display browser notification'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -124,19 +130,19 @@ class BackendBehaviors
                         ->class(['clear', 'form-note']),
                 ]),
                 (new Para())->items([
-                    (new Checkbox('notifyMe_wait', dcCore::app()->auth->user_prefs->notifyMe->wait))
+                    (new Checkbox('notifyMe_wait', $settings->wait))
                         ->value(1)
                         ->label((new Label(__('Wait for user interaction before closing notification'), Label::INSIDE_TEXT_AFTER))),
                 ]),
             ]),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_system', dcCore::app()->auth->user_prefs->notifyMe->system))
+                    (new Checkbox('notifyMe_system', $settings->system))
                         ->value(1)
                         ->label((new Label(__('Replace Dotclear notifications'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Para())->items([
-                    (new Checkbox('notifyMe_system_error', dcCore::app()->auth->user_prefs->notifyMe->system_error))
+                    (new Checkbox('notifyMe_system_error', $settings->system_error))
                         ->value(1)
                         ->label((new Label(__('Including Dotclear errors'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -145,7 +151,7 @@ class BackendBehaviors
             (new Text('h5', __('Notifications:'))),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_new_comments_on', dcCore::app()->auth->user_prefs->notifyMe->new_comments_on))
+                    (new Checkbox('notifyMe_new_comments_on', $settings->new_comments_on))
                         ->value(1)
                         ->label((new Label(__('Check new comments'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -154,19 +160,19 @@ class BackendBehaviors
                         ->class(['clear', 'form-note']),
                 ]),
                 (new Para())->items([
-                    (new Number('notifyMe_new_comments', 0, 3600, (int) dcCore::app()->auth->user_prefs->notifyMe->new_comments))
+                    (new Number('notifyMe_new_comments', 0, 3600, (int) $settings->new_comments))
                         ->default(30)
                         ->label((new Label(__('Check new comments every (in seconds, default: 30):'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
             ]),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_current_post_on', dcCore::app()->auth->user_prefs->notifyMe->current_post_on))
+                    (new Checkbox('notifyMe_current_post_on', $settings->current_post_on))
                         ->value(1)
                         ->label((new Label(__('Check current edited post'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Para())->items([
-                    (new Number('notifyMe_current_post', 0, 3600, (int) dcCore::app()->auth->user_prefs->notifyMe->current_post))
+                    (new Number('notifyMe_current_post', 0, 3600, (int) $settings->current_post))
                         ->default(60)
                         ->label((new Label(__('Check current edited post every (in seconds, default: 60):'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
@@ -177,19 +183,21 @@ class BackendBehaviors
 
     public static function adminPageHTMLHead()
     {
-        if (dcCore::app()->auth->user_prefs->notifyMe->active) {
+        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+
+        if ($settings->active) {
             // Set notification title
             $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name);
 
             echo
             dcPage::jsJson('notify_me_config', [
                 'title' => $title,
-                'wait'  => dcCore::app()->auth->user_prefs->notifyMe->wait,
+                'wait'  => $settings->wait,
             ]) .
-            dcPage::jsModuleLoad('notifyMe/js/notify.js', dcCore::app()->getVersion('notifyMe')) .
-            dcPage::jsModuleLoad('notifyMe/js/queue.js', dcCore::app()->getVersion('notifyMe'));
+            dcPage::jsModuleLoad(My::id() . '/js/notify.js', dcCore::app()->getVersion(My::id())) .
+            dcPage::jsModuleLoad(My::id() . '/js/queue.js', dcCore::app()->getVersion(My::id()));
 
-            if (dcCore::app()->auth->user_prefs->notifyMe->new_comments_on) {
+            if ($settings->new_comments_on) {
                 $sqlp = [
                     'limit'              => 1,                      // only the last one
                     'no_content'         => true,                   // content is not required
@@ -214,7 +222,7 @@ class BackendBehaviors
                 }
 
                 // Get interval between two check
-                $interval = (int) dcCore::app()->auth->user_prefs->notifyMe->new_comments;
+                $interval = (int) $settings->new_comments;
                 if (!$interval) {
                     $interval = 30; // 30 seconds by default
                 }
@@ -224,14 +232,16 @@ class BackendBehaviors
                     'check' => $interval * 1000,
                     'id'    => $last_comment_id,
                 ]) .
-                dcPage::jsModuleLoad('notifyMe/js/common.js', dcCore::app()->getVersion('notifyMe'));
+                dcPage::jsModuleLoad(My::id() . '/js/common.js', dcCore::app()->getVersion(My::id()));
             }
         }
     }
 
     public static function adminPostHeaders()
     {
-        if (dcCore::app()->auth->user_prefs->notifyMe->active && dcCore::app()->auth->user_prefs->notifyMe->current_post_on && dcCore::app()->admin->post_id) {
+        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+
+        if ($settings->active && $settings->current_post_on && dcCore::app()->admin->post_id) {
             $sqlp = ['post_id' => dcCore::app()->admin->post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = dcCore::app()->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {
@@ -244,7 +254,7 @@ class BackendBehaviors
             $dt    = $rs->post_upddt;
 
             // Get interval between two check
-            $interval = (int) dcCore::app()->auth->user_prefs->notifyMe->current_post;
+            $interval = (int) $settings->current_post;
             if (!$interval) {
                 $interval = 60; // 60 seconds by default
             }
@@ -256,7 +266,7 @@ class BackendBehaviors
                 'hash'  => $hash,
                 'dt'    => $dt,
             ]) .
-            dcPage::jsModuleLoad('notifyMe/js/post.js', dcCore::app()->getVersion('notifyMe'));
+            dcPage::jsModuleLoad(My::id() . '/js/post.js', dcCore::app()->getVersion(My::id()));
         }
     }
 }
