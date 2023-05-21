@@ -100,7 +100,7 @@ class BackendRest
         $rs = dcCore::app()->blog->getPosts($sqlp);
         if (!$rs->isEmpty()) {
             $media = new dcMedia();
-            $rsm   = $media->getPostMedia($rs->post_id);
+            $rsm   = $media->getPostMedia((int) $rs->post_id);
             $hash  = self::hashPost($rs, $rsm);
             if ($hash !== $get['post_hash']) {
                 // Fire a notification only if it has not been already fired
