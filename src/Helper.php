@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\notifyMe;
 
-use dcPage;
+use Dotclear\Core\Backend\Page;
 
 class Helper
 {
     public static function NotifyBrowser($message, $title = 'Dotclear')
     {
-        return dcPage::jsJson('notify_me_msg_' . time(), [
+        return Page::jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),
             'title'   => $title,
             'silent'  => false,

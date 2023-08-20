@@ -15,45 +15,42 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\notifyMe;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Backend extends dcNsProcess
+class Backend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::BACKEND);
-
         // dead but useful code, in order to have translations
         __('Browser notifications') . __('Display notifications in your web browser');
 
-        return static::$init;
+        return self::status(My::checkContext(My::BACKEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
         dcCore::app()->addBehaviors([
-            'adminBeforeUserOptionsUpdate' => [BackendBehaviors::class, 'adminBeforeUserOptionsUpdate'],
-            'adminPreferencesFormV2'       => [BackendBehaviors::class, 'adminPreferencesForm'],
+            'adminBeforeUserOptionsUpdate' => BackendBehaviors::adminBeforeUserOptionsUpdate(...),
+            'adminPreferencesFormV2'       => BackendBehaviors::adminPreferencesForm(...),
 
             // On all admin pages
-            'adminPageHTMLHead' => [BackendBehaviors::class, 'adminPageHTMLHead'],
+            'adminPageHTMLHead' => BackendBehaviors::adminPageHTMLHead(...),
 
             // On post and page editing mode
-            'adminPostHeaders' => [BackendBehaviors::class, 'adminPostHeaders'],
-            'adminPageHeaders' => [BackendBehaviors::class, 'adminPostHeaders'],
+            'adminPostHeaders' => BackendBehaviors::adminPostHeaders(...),
+            'adminPageHeaders' => BackendBehaviors::adminPostHeaders(...),
 
             // Transform error and standard DC notices to notifications
-            'adminPageNotificationError' => [BackendBehaviors::class, 'adminPageNotificationError'],
-            'adminPageNotification'      => [BackendBehaviors::class, 'adminPageNotification'],
+            'adminPageNotificationError' => BackendBehaviors::adminPageNotificationError(...),
+            'adminPageNotification'      => BackendBehaviors::adminPageNotification(...),
         ]);
 
-        dcCore::app()->rest->addFunction('notifyMeCheckNewComments', [BackendRest::class, 'checkNewComments']);
-        dcCore::app()->rest->addFunction('notifyMeCheckCurrentPost', [BackendRest::class, 'checkCurrentPost']);
+        dcCore::app()->rest->addFunction('notifyMeCheckNewComments', BackendRest::checkNewComments(...));
+        dcCore::app()->rest->addFunction('notifyMeCheckCurrentPost', BackendRest::checkCurrentPost(...));
 
         return true;
     }

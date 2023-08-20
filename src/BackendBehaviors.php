@@ -17,7 +17,7 @@ namespace Dotclear\Plugin\notifyMe;
 use dcBlog;
 use dcCore;
 use dcMedia;
-use dcPage;
+use Dotclear\Core\Backend\Page;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Div;
 use Dotclear\Helper\Html\Form\Fieldset;
@@ -32,14 +32,14 @@ class BackendBehaviors
 {
     private static function NotifyBrowser($message, $title = 'Dotclear', $silent = false)
     {
-        return dcPage::jsJson('notify_me_msg_' . time(), [
+        return Page::jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),
             'title'   => $title,
             'silent'  => $silent,
         ]);
     }
 
-    public static function adminPageNotificationError($core, $err)
+    public static function adminPageNotificationError($unused, $err)
     {
         $settings = dcCore::app()->auth->user_prefs->get(My::id());
         if ($settings->active) {
@@ -55,7 +55,7 @@ class BackendBehaviors
         }
     }
 
-    public static function adminPageNotification($core, $notice)
+    public static function adminPageNotification($unused, $notice)
     {
         $settings = dcCore::app()->auth->user_prefs->get(My::id());
         if ($settings->active) {
@@ -190,12 +190,12 @@ class BackendBehaviors
             $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name);
 
             echo
-            dcPage::jsJson('notify_me_config', [
+            Page::jsJson('notify_me_config', [
                 'title' => $title,
                 'wait'  => $settings->wait,
             ]) .
-            dcPage::jsModuleLoad(My::id() . '/js/notify.js', dcCore::app()->getVersion(My::id())) .
-            dcPage::jsModuleLoad(My::id() . '/js/queue.js', dcCore::app()->getVersion(My::id()));
+            My::jsLoad('notify.js') .
+            My::jsLoad('queue.js');
 
             if ($settings->new_comments_on) {
                 $sqlp = [
@@ -228,11 +228,11 @@ class BackendBehaviors
                 }
 
                 echo
-                dcPage::jsJson('notify_me_comments', [
+                Page::jsJson('notify_me_comments', [
                     'check' => $interval * 1000,
                     'id'    => $last_comment_id,
                 ]) .
-                dcPage::jsModuleLoad(My::id() . '/js/common.js', dcCore::app()->getVersion(My::id()));
+                My::jsLoad('common.js');
             }
         }
     }
@@ -260,13 +260,13 @@ class BackendBehaviors
             }
 
             return
-            dcPage::jsJson('notify_me_post', [
+            Page::jsJson('notify_me_post', [
                 'check' => $interval * 1000,
                 'id'    => dcCore::app()->admin->post_id,
                 'hash'  => $hash,
                 'dt'    => $dt,
             ]) .
-            dcPage::jsModuleLoad(My::id() . '/js/post.js', dcCore::app()->getVersion(My::id()));
+            My::jsLoad('post.js');
         }
     }
 }
