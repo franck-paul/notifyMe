@@ -32,10 +32,10 @@ class Install extends Process
         }
 
         try {
-            $settings = dcCore::app()->auth->user_prefs->get(My::id());
+            $preferences = My::prefs();
 
-            if (!$settings->prefExists('active')) {
-                $settings->put(
+            if (!$preferences->prefExists('active')) {
+                $preferences->put(
                     'active',
                     false,
                     'boolean',
@@ -43,8 +43,8 @@ class Install extends Process
                 );
             }
 
-            if (!$settings->prefExists('system')) {
-                $settings->put(
+            if (!$preferences->prefExists('system')) {
+                $preferences->put(
                     'system',
                     false,
                     'boolean',
@@ -52,8 +52,8 @@ class Install extends Process
                 );
             }
 
-            if (!$settings->prefExists('system_error')) {
-                $settings->put(
+            if (!$preferences->prefExists('system_error')) {
+                $preferences->put(
                     'system_error',
                     false,
                     'boolean',
@@ -61,16 +61,16 @@ class Install extends Process
                 );
             }
 
-            if (!$settings->prefExists('new_comments_on')) {
-                $settings->put(
+            if (!$preferences->prefExists('new_comments_on')) {
+                $preferences->put(
                     'new_comments_on',
                     true,
                     'boolean',
                     'Notify for new comments/trackbacks'
                 );
             }
-            if (!$settings->prefExists('new_comments')) {
-                $settings->put(
+            if (!$preferences->prefExists('new_comments')) {
+                $preferences->put(
                     'new_comments',
                     30,
                     'integer',
@@ -78,16 +78,16 @@ class Install extends Process
                 );
             }
 
-            if (!$settings->prefExists('current_post_on')) {
-                $settings->put(
+            if (!$preferences->prefExists('current_post_on')) {
+                $preferences->put(
                     'current_post_on',
                     true,
                     'boolean',
                     'Notify for entry changes'
                 );
             }
-            if (!$settings->prefExists('current_post')) {
-                $settings->put(
+            if (!$preferences->prefExists('current_post')) {
+                $preferences->put(
                     'current_post',
                     60,
                     'integer',

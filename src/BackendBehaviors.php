@@ -41,7 +41,7 @@ class BackendBehaviors
 
     public static function adminPageNotificationError($unused, $err)
     {
-        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        $settings = My::prefs();
         if ($settings->active) {
             if ($settings->system && $settings->system_error) {
                 // Set notification title
@@ -57,7 +57,7 @@ class BackendBehaviors
 
     public static function adminPageNotification($unused, $notice)
     {
-        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        $settings = My::prefs();
         if ($settings->active) {
             if ($settings->system) {
                 $type = [
@@ -86,7 +86,7 @@ class BackendBehaviors
     public static function adminBeforeUserOptionsUpdate()
     {
         // Get and store user's prefs for plugin options
-        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        $settings = My::prefs();
 
         try {
             $notifyMe_newcomments = (int) $_POST['notifyMe_new_comments'];
@@ -112,7 +112,7 @@ class BackendBehaviors
 
     public static function adminPreferencesForm()
     {
-        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        $settings = My::prefs();
 
         // Add fieldset for plugin options
         echo
@@ -183,7 +183,7 @@ class BackendBehaviors
 
     public static function adminPageHTMLHead()
     {
-        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        $settings = My::prefs();
 
         if ($settings->active) {
             // Set notification title
@@ -239,9 +239,9 @@ class BackendBehaviors
 
     public static function adminPostHeaders()
     {
-        $settings = dcCore::app()->auth->user_prefs->get(My::id());
+        $preferences = My::prefs();
 
-        if ($settings->active && $settings->current_post_on && dcCore::app()->admin->post_id) {
+        if ($preferences->active && $preferences->current_post_on && dcCore::app()->admin->post_id) {
             $sqlp = ['post_id' => dcCore::app()->admin->post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = dcCore::app()->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {
@@ -254,7 +254,7 @@ class BackendBehaviors
             $dt    = $rs->post_upddt;
 
             // Get interval between two check
-            $interval = (int) $settings->current_post;
+            $interval = (int) $preferences->current_post;
             if (!$interval) {
                 $interval = 60; // 60 seconds by default
             }
