@@ -18,7 +18,7 @@ use Dotclear\Core\Backend\Page;
 
 class Helper
 {
-    public static function NotifyBrowser($message, $title = 'Dotclear')
+    public static function NotifyBrowser(string $message, string $title = 'Dotclear'): string
     {
         return Page::jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),

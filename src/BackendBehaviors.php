@@ -26,11 +26,12 @@ use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Number;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Text;
+use Dotclear\Interface\Core\ErrorInterface;
 use Exception;
 
 class BackendBehaviors
 {
-    private static function NotifyBrowser($message, $title = 'Dotclear', $silent = false)
+    private static function NotifyBrowser(string $message, string $title = 'Dotclear', bool $silent = false): string
     {
         return Page::jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),
@@ -39,23 +40,40 @@ class BackendBehaviors
         ]);
     }
 
-    public static function adminPageNotificationError($unused, $err)
+    /**
+     * @param      mixed            $unused  The unused
+     * @param      ErrorInterface   $err     The error
+     *
+     * @return     string
+     */
+    public static function adminPageNotificationError($unused, ErrorInterface $err): string
     {
         $settings = My::prefs();
         if ($settings->active) {
             if ($settings->system && $settings->system_error) {
-                // Set notification title
-                $title = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name) . __(' - error');
+                if ($err->flag()) {
+                    $message = '';
+                    $title   = sprintf(__('Dotclear : %s'), dcCore::app()->blog->name) . __(' - error');
 
-                // Set notification text
-                $msg = (string) $err;
+                    foreach ($err->dump() as $msg) {
+                        $message .= ($message === '' ? '' : ' – ') . $msg;
+                    }
 
-                return self::NotifyBrowser($msg, $title, false);
+                    return self::NotifyBrowser($message, $title, false);
+                }
             }
         }
+
+        return '';
     }
 
-    public static function adminPageNotification($unused, $notice)
+    /**
+     * @param      mixed                    $unused  The unused
+     * @param      array<string, string>    $notice  The notice
+     *
+     * @return     string
+     */
+    public static function adminPageNotification($unused, array $notice): string
     {
         $settings = My::prefs();
         if ($settings->active) {
@@ -81,9 +99,11 @@ class BackendBehaviors
                 return self::notifyBrowser($msg, $title, $silent);
             }
         }
+
+        return '';
     }
 
-    public static function adminBeforeUserOptionsUpdate()
+    public static function adminBeforeUserOptionsUpdate(): string
     {
         // Get and store user's prefs for plugin options
         $settings = My::prefs();
@@ -108,9 +128,11 @@ class BackendBehaviors
         } catch (Exception $e) {
             dcCore::app()->error->add($e->getMessage());
         }
+
+        return '';
     }
 
-    public static function adminPreferencesForm()
+    public static function adminPreferencesForm(): string
     {
         $settings = My::prefs();
 
@@ -179,9 +201,11 @@ class BackendBehaviors
             ]),
         ])
         ->render();
+
+        return '';
     }
 
-    public static function adminPageHTMLHead()
+    public static function adminPageHTMLHead(): string
     {
         $settings = My::prefs();
 
@@ -235,9 +259,11 @@ class BackendBehaviors
                 My::jsLoad('common.js');
             }
         }
+
+        return '';
     }
 
-    public static function adminPostHeaders()
+    public static function adminPostHeaders(): string
     {
         $preferences = My::prefs();
 
@@ -246,7 +272,7 @@ class BackendBehaviors
             $rs   = dcCore::app()->blog->getPosts($sqlp);
             if ($rs->isEmpty()) {
                 // Not recorded
-                return;
+                return '';
             }
             $media = new dcMedia();
             $rsm   = $media->getPostMedia((int) dcCore::app()->admin->post_id);
@@ -268,5 +294,7 @@ class BackendBehaviors
             ]) .
             My::jsLoad('post.js');
         }
+
+        return '';
     }
 }

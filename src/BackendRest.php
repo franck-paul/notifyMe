@@ -17,6 +17,7 @@ namespace Dotclear\Plugin\notifyMe;
 use dcBlog;
 use dcCore;
 use dcMedia;
+use Dotclear\Database\MetaRecord;
 use Exception;
 
 class BackendRest
@@ -24,11 +25,11 @@ class BackendRest
     /**
      * Serve method to check new comments for current blog.
      *
-     * @param      array      $get    The cleaned $_GET
+     * @param      array<string, string>      $get    The cleaned $_GET
      *
-     * @return     array   The payload.
+     * @return     array<string, mixed>   The payload.
      */
-    public static function checkNewComments($get): array
+    public static function checkNewComments(array $get): array
     {
         $last_id         = !empty($get['last_id']) ? $get['last_id'] : -1;
         $last_comment_id = -1;
@@ -67,13 +68,13 @@ class BackendRest
     /**
      * Serve method to check current edited post.
      *
-     * @param      array      $get    The cleaned $_GET
+     * @param      array<string, string>      $get    The cleaned $_GET
      *
      * @throws     Exception
      *
-     * @return     array   The payload.
+     * @return     array<string, mixed>   The payload.
      */
-    public static function checkCurrentPost($get): array
+    public static function checkCurrentPost(array $get): array
     {
         if (empty($get['post_id'])) {
             throw new Exception('No post ID');
@@ -118,7 +119,13 @@ class BackendRest
         return $payload;
     }
 
-    public static function hashPost($rs, $rsm)
+    /**
+     * @param      MetaRecord                               $rs     Recordset
+     * @param      array<int,\Dotclear\Helper\File\File>    $rsm    The rsm
+     *
+     * @return     string
+     */
+    public static function hashPost(MetaRecord $rs, array $rsm): string
     {
         $l = [];
         if ($rs->fetch()) {
