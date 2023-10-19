@@ -16,7 +16,7 @@ namespace Dotclear\Plugin\notifyMe;
 
 use dcBlog;
 use dcCore;
-use dcMedia;
+use Dotclear\App;
 use Dotclear\Database\MetaRecord;
 use Exception;
 
@@ -49,7 +49,7 @@ class BackendRest
             $sqlp['sql'] .= " AND (comment_email <> '" . $email . "' OR comment_site <> '" . $url . "')";
         }
 
-        $rs    = dcCore::app()->blog->getComments($sqlp);
+        $rs    = App::blog()->getComments($sqlp);
         $count = $rs->count();
 
         if ($count) {
@@ -98,9 +98,9 @@ class BackendRest
             'ret' => 'ok',
         ];
 
-        $rs = dcCore::app()->blog->getPosts($sqlp);
+        $rs = App::blog()->getPosts($sqlp);
         if (!$rs->isEmpty()) {
-            $media = new dcMedia();
+            $media = dcCore::app()->media;
             $rsm   = $media->getPostMedia((int) $rs->post_id);
             $hash  = self::hashPost($rs, $rsm);
             if ($hash !== $get['post_hash']) {
