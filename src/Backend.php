@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\notifyMe;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
 class Backend extends Process
@@ -33,7 +33,7 @@ class Backend extends Process
             return false;
         }
 
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             'adminBeforeUserOptionsUpdate' => BackendBehaviors::adminBeforeUserOptionsUpdate(...),
             'adminPreferencesFormV2'       => BackendBehaviors::adminPreferencesForm(...),
 
@@ -49,8 +49,8 @@ class Backend extends Process
             'adminPageNotification'      => BackendBehaviors::adminPageNotification(...),
         ]);
 
-        dcCore::app()->rest->addFunction('notifyMeCheckNewComments', BackendRest::checkNewComments(...));
-        dcCore::app()->rest->addFunction('notifyMeCheckCurrentPost', BackendRest::checkCurrentPost(...));
+        App::rest()->addFunction('notifyMeCheckNewComments', BackendRest::checkNewComments(...));
+        App::rest()->addFunction('notifyMeCheckCurrentPost', BackendRest::checkCurrentPost(...));
 
         return true;
     }

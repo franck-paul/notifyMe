@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\notifyMe;
 
-use dcBlog;
-use dcCore;
 use Dotclear\App;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Helper\Html\Form\Checkbox;
@@ -26,6 +24,7 @@ use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Number;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Text;
+use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Interface\Core\ErrorInterface;
 use Exception;
 
@@ -127,7 +126,7 @@ class BackendBehaviors
                 $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), 'boolean');
                 $settings->put('current_post', $notifyMe_currentpost);
             } catch (Exception $e) {
-                dcCore::app()->error->add($e->getMessage());
+                App::error()->add($e->getMessage());
             }
         }
 
@@ -227,12 +226,12 @@ class BackendBehaviors
                 $sqlp = [
                     'limit'              => 1,                      // only the last one
                     'no_content'         => true,                   // content is not required
-                    'comment_status_not' => dcBlog::COMMENT_JUNK,   // ignore spam
+                    'comment_status_not' => BlogInterface::COMMENT_JUNK,   // ignore spam
                     'order'              => 'comment_id DESC',      // get last first
                 ];
 
-                $email = dcCore::app()->auth->getInfo('user_email');
-                $url   = dcCore::app()->auth->getInfo('user_url');
+                $email = App::auth()->getInfo('user_email');
+                $url   = App::auth()->getInfo('user_url');
                 if ($email && $url) {
                     // Ignore own comments/trackbacks
                     $sqlp['sql'] = " AND (comment_email <> '" . $email . "' OR comment_site <> '" . $url . "')";
@@ -269,15 +268,15 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings?->active && $settings->current_post_on && dcCore::app()->admin->post_id) {
-            $sqlp = ['post_id' => dcCore::app()->admin->post_id];   // set in admin/post.php and plugins/pages/page.php
+        if ($settings?->active && $settings->current_post_on && App::backend()->post_id) {
+            $sqlp = ['post_id' => App::backend()->post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = App::blog()->getPosts($sqlp);
             if ($rs->isEmpty()) {
                 // Not recorded
                 return '';
             }
-            $media = dcCore::app()->media;
-            $rsm   = $media->getPostMedia((int) dcCore::app()->admin->post_id);
+            $media = App::media();
+            $rsm   = $media->getPostMedia((int) App::backend()->post_id);
             $hash  = BackendRest::hashPost($rs, $rsm);
             $dt    = $rs->post_upddt;
 
@@ -290,7 +289,7 @@ class BackendBehaviors
             return
             Page::jsJson('notify_me_post', [
                 'check' => $interval * 1000,
-                'id'    => dcCore::app()->admin->post_id,
+                'id'    => App::backend()->post_id,
                 'hash'  => $hash,
                 'dt'    => $dt,
             ]) .

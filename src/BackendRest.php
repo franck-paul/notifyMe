@@ -14,10 +14,9 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\notifyMe;
 
-use dcBlog;
-use dcCore;
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
+use Dotclear\Interface\Core\BlogInterface;
 use Exception;
 
 class BackendRest
@@ -36,14 +35,14 @@ class BackendRest
 
         $sqlp = [
             'no_content'         => true,                   // content is not required
-            'comment_status_not' => dcBlog::COMMENT_JUNK,   // ignore spam
+            'comment_status_not' => BlogInterface::COMMENT_JUNK,   // ignore spam
             'order'              => 'comment_id ASC',
 
             'sql' => 'AND comment_id > ' . $last_id, // only new ones
         ];
 
-        $email = dcCore::app()->auth->getInfo('user_email');
-        $url   = dcCore::app()->auth->getInfo('user_url');
+        $email = App::auth()->getInfo('user_email');
+        $url   = App::auth()->getInfo('user_url');
         if ($email && $url) {
             // Ignore own comments/trackbacks
             $sqlp['sql'] .= " AND (comment_email <> '" . $email . "' OR comment_site <> '" . $url . "')";
@@ -100,7 +99,7 @@ class BackendRest
 
         $rs = App::blog()->getPosts($sqlp);
         if (!$rs->isEmpty()) {
-            $media = dcCore::app()->media;
+            $media = App::media();
             $rsm   = $media->getPostMedia((int) $rs->post_id);
             $hash  = self::hashPost($rs, $rsm);
             if ($hash !== $get['post_hash']) {
