@@ -24,7 +24,6 @@ use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Number;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Text;
-use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Interface\Core\ErrorInterface;
 use Exception;
 
@@ -226,7 +225,7 @@ class BackendBehaviors
                 $sqlp = [
                     'limit'              => 1,                      // only the last one
                     'no_content'         => true,                   // content is not required
-                    'comment_status_not' => BlogInterface::COMMENT_JUNK,   // ignore spam
+                    'comment_status_not' => App::blog()::COMMENT_JUNK,   // ignore spam
                     'order'              => 'comment_id DESC',      // get last first
                 ];
 

@@ -16,7 +16,6 @@ namespace Dotclear\Plugin\notifyMe;
 
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
-use Dotclear\Interface\Core\BlogInterface;
 use Exception;
 
 class BackendRest
@@ -35,7 +34,7 @@ class BackendRest
 
         $sqlp = [
             'no_content'         => true,                   // content is not required
-            'comment_status_not' => BlogInterface::COMMENT_JUNK,   // ignore spam
+            'comment_status_not' => App::blog()::COMMENT_JUNK,   // ignore spam
             'order'              => 'comment_id ASC',
 
             'sql' => 'AND comment_id > ' . $last_id, // only new ones
