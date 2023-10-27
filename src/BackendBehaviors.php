@@ -47,18 +47,16 @@ class BackendBehaviors
     public static function adminPageNotificationError($unused, ErrorInterface $err): string
     {
         $settings = My::prefs();
-        if ($settings?->active) {
-            if ($settings->system && $settings->system_error) {
-                if ($err->flag()) {
-                    $message = '';
-                    $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
+        if ($settings?->active && ($settings->system && $settings->system_error)) {
+            if ($err->flag()) {
+                $message = '';
+                $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
 
-                    foreach ($err->dump() as $msg) {
-                        $message .= ($message === '' ? '' : ' – ') . $msg;
-                    }
-
-                    return self::NotifyBrowser($message, $title, false);
+                foreach ($err->dump() as $msg) {
+                    $message .= ($message === '' ? '' : ' – ') . $msg;
                 }
+
+                return self::NotifyBrowser($message, $title, false);
             }
         }
 
@@ -74,28 +72,24 @@ class BackendBehaviors
     public static function adminPageNotification($unused, array $notice): string
     {
         $settings = My::prefs();
-        if ($settings?->active) {
-            if ($settings->system) {
-                $type = [
-                    'success' => '',
-                    'warning' => __(' - warning'),
-                    'error'   => __(' - error'), ];
-
-                // Set notification title
-                $title  = sprintf(__('Dotclear : %s'), App::blog()->name());
-                $silent = true;
-                if (isset($type[$notice['class']])) {
-                    $title .= $type[$notice['class']];
-                    if ($notice['class'] == 'error') {
-                        $silent = false;
-                    }
+        if ($settings?->active && $settings->system) {
+            $type = [
+                'success' => '',
+                'warning' => __(' - warning'),
+                'error'   => __(' - error'), ];
+            // Set notification title
+            $title  = sprintf(__('Dotclear : %s'), App::blog()->name());
+            $silent = true;
+            if (isset($type[$notice['class']])) {
+                $title .= $type[$notice['class']];
+                if ($notice['class'] == 'error') {
+                    $silent = false;
                 }
-
-                // Set notification text
-                $msg = $notice['text'];
-
-                return self::notifyBrowser($msg, $title, $silent);
             }
+
+            // Set notification text
+            $msg = $notice['text'];
+            return self::notifyBrowser($msg, $title, $silent);
         }
 
         return '';
@@ -112,10 +106,12 @@ class BackendBehaviors
                 if ($notifyMe_newcomments < 1) {
                     $notifyMe_newcomments = 30; // seconds
                 }
+
                 $notifyMe_currentpost = (int) $_POST['notifyMe_current_post'];
                 if ($notifyMe_currentpost < 1) {
                     $notifyMe_currentpost = 60; // seconds
                 }
+
                 $settings->put('active', !empty($_POST['notifyMe_active']), 'boolean');
                 $settings->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
                 $settings->put('system', !empty($_POST['notifyMe_system']), 'boolean');
@@ -247,7 +243,7 @@ class BackendBehaviors
 
                 // Get interval between two check
                 $interval = (int) $settings->new_comments;
-                if (!$interval) {
+                if ($interval === 0) {
                     $interval = 30; // 30 seconds by default
                 }
 
@@ -274,6 +270,7 @@ class BackendBehaviors
                 // Not recorded
                 return '';
             }
+
             $media = App::media();
             $rsm   = $media->getPostMedia((int) App::backend()->post_id);
             $hash  = BackendRest::hashPost($rs, $rsm);
@@ -281,7 +278,7 @@ class BackendBehaviors
 
             // Get interval between two check
             $interval = (int) $settings->current_post;
-            if (!$interval) {
+            if ($interval === 0) {
                 $interval = 60; // 60 seconds by default
             }
 

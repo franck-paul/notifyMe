@@ -68,6 +68,7 @@ class Install extends Process
                         'Notify for new comments/trackbacks'
                     );
                 }
+
                 if (!$preferences->prefExists('new_comments')) {
                     $preferences->put(
                         'new_comments',
@@ -85,6 +86,7 @@ class Install extends Process
                         'Notify for entry changes'
                     );
                 }
+
                 if (!$preferences->prefExists('current_post')) {
                     $preferences->put(
                         'current_post',
@@ -94,8 +96,8 @@ class Install extends Process
                     );
                 }
             }
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         return true;

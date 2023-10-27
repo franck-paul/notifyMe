@@ -29,7 +29,7 @@ class BackendRest
      */
     public static function checkNewComments(array $get): array
     {
-        $last_id         = !empty($get['last_id']) ? $get['last_id'] : -1;
+        $last_id         = empty($get['last_id']) ? -1 : $get['last_id'];
         $last_comment_id = -1;
 
         $sqlp = [
@@ -77,9 +77,11 @@ class BackendRest
         if (empty($get['post_id'])) {
             throw new Exception('No post ID');
         }
+
         if (empty($get['post_hash'])) {
             throw new Exception('No post Hash');
         }
+
         if (empty($get['post_dt'])) {
             throw new Exception('No post DT');
         }
@@ -135,11 +137,13 @@ class BackendRest
                 }
             }
         }
-        if (!empty($rsm)) {
+
+        if ($rsm !== []) {
             foreach ($rsm as $f) {
                 $l[] = $f->media_id;
             }
         }
+
         $str = serialize($l);
 
         return hash('md5', $str);
