@@ -25,6 +25,6 @@ $this->registerModule(
 
         'details'    => 'https://open-time.net/?q=notifyMe',
         'support'    => 'https://github.com/franck-paul/notifyMe',
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/notifyMe/master/dcstore.xml',
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/notifyMe/main/dcstore.xml',
     ]
 );

@@ -89,6 +89,7 @@ class BackendBehaviors
 
             // Set notification text
             $msg = $notice['text'];
+
             return self::notifyBrowser($msg, $title, $silent);
         }
 
@@ -165,7 +166,7 @@ class BackendBehaviors
                         ->label((new Label(__('Including Dotclear errors'), Label::INSIDE_TEXT_AFTER))),
                 ]),
             ]),
-            (new Text(null, '<hr />')),
+            (new Text(null, '<hr>')),
             (new Text('h5', __('Notifications:'))),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
