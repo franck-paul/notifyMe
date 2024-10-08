@@ -20,7 +20,7 @@ dotclear.notify_me = {
     // Look for timestamped message(s)
     const list = document.querySelectorAll("[id^='notify_me_msg_']");
     if (list.length) {
-      list.forEach((elt) => {
+      for (const elt of list) {
         let id = elt.getAttribute('id');
         if (id.match(/-data$/)) {
           id = elt.getAttribute('id').substring(0, id.length - 5);
@@ -29,7 +29,7 @@ dotclear.notify_me = {
             dotclear.notify_me.add(msg.message, msg.title || null, msg.silent || false);
           }
         }
-      });
+      }
     }
     // Look for generic message
     const data = dotclear.getData('notify_me_msg');
@@ -38,9 +38,9 @@ dotclear.notify_me = {
     }
     // Display notifications
     if (dotclear.notify_me.queue.length) {
-      dotclear.notify_me.queue.forEach((elt) => {
+      for (const elt of dotclear.notify_me.queue) {
         notifyBrowser(elt.message, elt.title || null, elt.silent || false, dotclear.notify_me.config.wait);
-      });
+      }
       dotclear.notify_me.queue = [];
     }
     dotclear.notify_me.running = false;
