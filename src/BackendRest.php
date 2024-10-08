@@ -52,7 +52,9 @@ class BackendRest
 
         if ($count) {
             while ($rs->fetch()) {
-                $last_comment_id = $rs->comment_id;
+                if (!$rs->isMe()) {
+                    $last_comment_id = $rs->comment_id;
+                }
             }
         }
 
