@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief notifyMe, a plugin for Dotclear 2
  *
@@ -47,7 +48,7 @@ class BackendBehaviors
     public static function adminPageNotificationError($unused, ErrorInterface $err): string
     {
         $settings = My::prefs();
-        if ($settings?->active && ($settings->system && $settings->system_error)) {
+        if ($settings->active && ($settings->system && $settings->system_error)) {
             if ($err->flag()) {
                 $message = '';
                 $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
@@ -72,7 +73,7 @@ class BackendBehaviors
     public static function adminPageNotification($unused, array $notice): string
     {
         $settings = My::prefs();
-        if ($settings?->active && $settings->system) {
+        if ($settings->active && $settings->system) {
             $type = [
                 'success' => '',
                 'warning' => __(' - warning'),
@@ -101,29 +102,27 @@ class BackendBehaviors
         // Get and store user's prefs for plugin options
         $settings = My::prefs();
 
-        if ($settings) {
-            try {
-                $notifyMe_newcomments = (int) $_POST['notifyMe_new_comments'];
-                if ($notifyMe_newcomments < 1) {
-                    $notifyMe_newcomments = 30; // seconds
-                }
-
-                $notifyMe_currentpost = (int) $_POST['notifyMe_current_post'];
-                if ($notifyMe_currentpost < 1) {
-                    $notifyMe_currentpost = 60; // seconds
-                }
-
-                $settings->put('active', !empty($_POST['notifyMe_active']), 'boolean');
-                $settings->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
-                $settings->put('system', !empty($_POST['notifyMe_system']), 'boolean');
-                $settings->put('system_error', !empty($_POST['notifyMe_system_error']), 'boolean');
-                $settings->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), 'boolean');
-                $settings->put('new_comments', $notifyMe_newcomments);
-                $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), 'boolean');
-                $settings->put('current_post', $notifyMe_currentpost);
-            } catch (Exception $e) {
-                App::error()->add($e->getMessage());
+        try {
+            $notifyMe_newcomments = (int) $_POST['notifyMe_new_comments'];
+            if ($notifyMe_newcomments < 1) {
+                $notifyMe_newcomments = 30; // seconds
             }
+
+            $notifyMe_currentpost = (int) $_POST['notifyMe_current_post'];
+            if ($notifyMe_currentpost < 1) {
+                $notifyMe_currentpost = 60; // seconds
+            }
+
+            $settings->put('active', !empty($_POST['notifyMe_active']), 'boolean');
+            $settings->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
+            $settings->put('system', !empty($_POST['notifyMe_system']), 'boolean');
+            $settings->put('system_error', !empty($_POST['notifyMe_system_error']), 'boolean');
+            $settings->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), 'boolean');
+            $settings->put('new_comments', $notifyMe_newcomments);
+            $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), 'boolean');
+            $settings->put('current_post', $notifyMe_currentpost);
+        } catch (Exception $e) {
+            App::error()->add($e->getMessage());
         }
 
         return '';
@@ -140,7 +139,7 @@ class BackendBehaviors
         ->fields([
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_active', $settings?->active))
+                    (new Checkbox('notifyMe_active', $settings->active))
                         ->value(1)
                         ->label((new Label(__('Display browser notification'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -149,19 +148,19 @@ class BackendBehaviors
                         ->class(['clear', 'form-note']),
                 ]),
                 (new Para())->items([
-                    (new Checkbox('notifyMe_wait', $settings?->wait))
+                    (new Checkbox('notifyMe_wait', $settings->wait))
                         ->value(1)
                         ->label((new Label(__('Wait for user interaction before closing notification'), Label::INSIDE_TEXT_AFTER))),
                 ]),
             ]),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_system', $settings?->system))
+                    (new Checkbox('notifyMe_system', $settings->system))
                         ->value(1)
                         ->label((new Label(__('Replace Dotclear notifications'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Para())->items([
-                    (new Checkbox('notifyMe_system_error', $settings?->system_error))
+                    (new Checkbox('notifyMe_system_error', $settings->system_error))
                         ->value(1)
                         ->label((new Label(__('Including Dotclear errors'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -170,7 +169,7 @@ class BackendBehaviors
             (new Text('h5', __('Notifications:'))),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_new_comments_on', $settings?->new_comments_on))
+                    (new Checkbox('notifyMe_new_comments_on', $settings->new_comments_on))
                         ->value(1)
                         ->label((new Label(__('Check new comments'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -179,19 +178,19 @@ class BackendBehaviors
                         ->class(['clear', 'form-note']),
                 ]),
                 (new Para())->items([
-                    (new Number('notifyMe_new_comments', 0, 3600, (int) $settings?->new_comments))
+                    (new Number('notifyMe_new_comments', 0, 3600, (int) $settings->new_comments))
                         ->default(30)
                         ->label((new Label(__('Check new comments every (in seconds, default: 30):'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
             ]),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_current_post_on', $settings?->current_post_on))
+                    (new Checkbox('notifyMe_current_post_on', $settings->current_post_on))
                         ->value(1)
                         ->label((new Label(__('Check current edited post'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Para())->items([
-                    (new Number('notifyMe_current_post', 0, 3600, (int) $settings?->current_post))
+                    (new Number('notifyMe_current_post', 0, 3600, (int) $settings->current_post))
                         ->default(60)
                         ->label((new Label(__('Check current edited post every (in seconds, default: 60):'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
@@ -206,7 +205,7 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings?->active) {
+        if ($settings->active) {
             // Set notification title
             $title = sprintf(__('Dotclear : %s'), App::blog()->name());
 
@@ -264,7 +263,7 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings?->active && $settings->current_post_on && App::backend()->post_id) {
+        if ($settings->active && $settings->current_post_on && App::backend()->post_id) {
             $sqlp = ['post_id' => App::backend()->post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = App::blog()->getPosts($sqlp);
             if ($rs->isEmpty()) {
