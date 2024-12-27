@@ -42,23 +42,19 @@ class BackendBehaviors
     /**
      * @param      mixed            $unused  The unused
      * @param      ErrorInterface   $err     The error
-     *
-     * @return     string
      */
     public static function adminPageNotificationError($unused, ErrorInterface $err): string
     {
         $settings = My::prefs();
-        if ($settings->active && ($settings->system && $settings->system_error)) {
-            if ($err->flag()) {
-                $message = '';
-                $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
+        if ($settings->active && $settings->system && $settings->system_error && $err->flag()) {
+            $message = '';
+            $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
 
-                foreach ($err->dump() as $msg) {
-                    $message .= ($message === '' ? '' : ' – ') . $msg;
-                }
-
-                return self::NotifyBrowser($message, $title, false);
+            foreach ($err->dump() as $msg) {
+                $message .= ($message === '' ? '' : ' – ') . $msg;
             }
+
+            return self::NotifyBrowser($message, $title, false);
         }
 
         return '';
@@ -67,8 +63,6 @@ class BackendBehaviors
     /**
      * @param      mixed                    $unused  The unused
      * @param      array<string, string>    $notice  The notice
-     *
-     * @return     string
      */
     public static function adminPageNotification($unused, array $notice): string
     {
@@ -83,7 +77,7 @@ class BackendBehaviors
             $silent = true;
             if (isset($type[$notice['class']])) {
                 $title .= $type[$notice['class']];
-                if ($notice['class'] == 'error') {
+                if ($notice['class'] === 'error') {
                     $silent = false;
                 }
             }

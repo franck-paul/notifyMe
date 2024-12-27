@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief notifyMe, a plugin for Dotclear 2
  *
@@ -126,8 +127,6 @@ class BackendRest
     /**
      * @param      MetaRecord                               $rs     Recordset
      * @param      array<int,\Dotclear\Helper\File\File>    $rsm    The rsm
-     *
-     * @return     string
      */
     public static function hashPost(MetaRecord $rs, array $rsm): string
     {
@@ -142,10 +141,8 @@ class BackendRest
             }
         }
 
-        if ($rsm !== []) {
-            foreach ($rsm as $f) {
-                $l[] = $f->media_id;
-            }
+        foreach ($rsm as $f) {
+            $l[] = $f->media_id;
         }
 
         $str = serialize($l);
