@@ -213,10 +213,10 @@ class BackendBehaviors
 
             if ($settings->new_comments_on) {
                 $sqlp = [
-                    'limit'              => 1,                      // only the last one
-                    'no_content'         => true,                   // content is not required
-                    'comment_status_not' => App::blog()::COMMENT_JUNK,   // ignore spam
-                    'order'              => 'comment_id DESC',      // get last first
+                    'limit'              => 1,                              // only the last one
+                    'no_content'         => true,                           // content is not required
+                    'comment_status_not' => App::status()->comment()::JUNK, // ignore spam
+                    'order'              => 'comment_id DESC',              // get last first
                 ];
 
                 $email = App::auth()->getInfo('user_email');

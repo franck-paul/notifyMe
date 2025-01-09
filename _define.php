@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief notifyMe, a plugin for Dotclear 2
  *
@@ -16,7 +17,7 @@ $this->registerModule(
     'Franck Paul and contributors',
     '4.3.1',
     [
-        'requires'    => [['core', '2.28']],
+        'requires'    => [['core', '2.33']],
         'permissions' => 'My',
         'type'        => 'plugin',
         'settings'    => [

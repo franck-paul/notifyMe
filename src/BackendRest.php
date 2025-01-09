@@ -34,8 +34,8 @@ class BackendRest
         $last_comment_id = -1;
 
         $sqlp = [
-            'no_content'         => true,                   // content is not required
-            'comment_status_not' => App::blog()::COMMENT_JUNK,   // ignore spam
+            'no_content'         => true,                           // content is not required
+            'comment_status_not' => App::status()->comment()::JUNK, // ignore spam
             'order'              => 'comment_id ASC',
 
             'sql' => 'AND comment_id > ' . $last_id, // only new ones
