@@ -15,7 +15,7 @@ $this->registerModule(
     'Browser notifications',
     'Display notifications in your web browser',
     'Franck Paul and contributors',
-    '4.3.1',
+    '5.0',
     [
         'requires'    => [['core', '2.33']],
         'permissions' => 'My',
