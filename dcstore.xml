@@ -1,11 +1,11 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="notifyMe">
     <name>Browser notifications</name>
-    <version>4.3.1</version>
+    <version>5.0</version>
     <author>Franck Paul and contributors</author>
     <desc>Display notifications in your web browser</desc>
-    <file>https://github.com/franck-paul/notifyMe/releases/download/4.3.1/plugin-notifyMe-4.3.1.zip</file>
-    <da:dcmin>2.28</da:dcmin>
+    <file>https://github.com/franck-paul/notifyMe/releases/download/5.0/plugin-notifyMe-5.0.zip</file>
+    <da:dcmin>2.33</da:dcmin>
     <da:details>https://open-time.net/?q=notifyMe</da:details>
     <da:support>https://github.com/franck-paul/notifyMe</da:support>
   </module>
