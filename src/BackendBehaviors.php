@@ -30,7 +30,7 @@ use Exception;
 
 class BackendBehaviors
 {
-    private static function NotifyBrowser(string $message, string $title = 'Dotclear', bool $silent = false): string
+    private static function notifyBrowser(string $message, string $title = 'Dotclear', bool $silent = false): string
     {
         return Page::jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),
@@ -54,7 +54,7 @@ class BackendBehaviors
                 $message .= ($message === '' ? '' : ' – ') . $msg;
             }
 
-            return self::NotifyBrowser($message, $title, false);
+            return self::notifyBrowser($message, $title, false);
         }
 
         return '';
