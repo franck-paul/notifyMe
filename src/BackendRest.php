@@ -125,8 +125,8 @@ class BackendRest
     }
 
     /**
-     * @param      MetaRecord                               $rs     Recordset
-     * @param      array<int,\Dotclear\Helper\File\File>    $rsm    The rsm
+     * @param      MetaRecord                                   $rs     Recordset
+     * @param      array<int,\Dotclear\Helper\File\MediaFile>   $rsm    The rsm
      */
     public static function hashPost(MetaRecord $rs, array $rsm): string
     {
