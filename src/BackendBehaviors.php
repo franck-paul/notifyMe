@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\notifyMe;
 
 use Dotclear\App;
-use Dotclear\Core\Backend\Page;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Div;
 use Dotclear\Helper\Html\Form\Fieldset;
@@ -32,7 +31,7 @@ class BackendBehaviors
 {
     private static function notifyBrowser(string $message, string $title = 'Dotclear', bool $silent = false): string
     {
-        return Page::jsJson('notify_me_msg_' . time(), [
+        return App::backend()->page()->jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),
             'title'   => $title,
             'silent'  => $silent,
@@ -204,7 +203,7 @@ class BackendBehaviors
             $title = sprintf(__('Dotclear : %s'), App::blog()->name());
 
             echo
-            Page::jsJson('notify_me_config', [
+            App::backend()->page()->jsJson('notify_me_config', [
                 'title' => $title,
                 'wait'  => $settings->wait,
             ]) .
@@ -242,7 +241,7 @@ class BackendBehaviors
                 }
 
                 echo
-                Page::jsJson('notify_me_comments', [
+                App::backend()->page()->jsJson('notify_me_comments', [
                     'check' => $interval * 1000,
                     'id'    => $last_comment_id,
                 ]) .
@@ -277,7 +276,7 @@ class BackendBehaviors
             }
 
             return
-            Page::jsJson('notify_me_post', [
+            App::backend()->page()->jsJson('notify_me_post', [
                 'check' => $interval * 1000,
                 'id'    => App::backend()->post_id,
                 'hash'  => $hash,

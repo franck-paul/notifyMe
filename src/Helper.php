@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief notifyMe, a plugin for Dotclear 2
  *
@@ -14,13 +15,13 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\notifyMe;
 
-use Dotclear\Core\Backend\Page;
+use Dotclear\App;
 
 class Helper
 {
     public static function NotifyBrowser(string $message, string $title = 'Dotclear'): string
     {
-        return Page::jsJson('notify_me_msg_' . time(), [
+        return App::backend()->page()->jsJson('notify_me_msg_' . time(), [
             'message' => str_replace("\n", '. ', $message),
             'title'   => $title,
             'silent'  => false,
