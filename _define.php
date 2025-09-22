@@ -15,9 +15,9 @@ $this->registerModule(
     'Browser notifications',
     'Display notifications in your web browser',
     'Franck Paul and contributors',
-    '6.0',
+    '6.1',
     [
-        'date'        => '2025-09-07T15:52:53+0200',
+        'date'        => '2025-09-22T10:28:20+0200',
         'requires'    => [['core', '2.36']],
         'permissions' => 'My',
         'type'        => 'plugin',
