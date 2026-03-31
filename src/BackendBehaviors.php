@@ -96,24 +96,24 @@ class BackendBehaviors
         $settings = My::prefs();
 
         try {
-            $notifyMe_newcomments = (int) $_POST['notifyMe_new_comments'];
-            if ($notifyMe_newcomments < 1) {
-                $notifyMe_newcomments = 30; // seconds
+            $newcomments = isset($_POST['notifyMe_new_comments']) && is_numeric($newcomments = $_POST['notifyMe_new_comments']) ? (int) $newcomments : 0;
+            if ($newcomments < 1) {
+                $newcomments = 30; // seconds
             }
 
-            $notifyMe_currentpost = (int) $_POST['notifyMe_current_post'];
-            if ($notifyMe_currentpost < 1) {
-                $notifyMe_currentpost = 60; // seconds
+            $currentpost = isset($_POST['notifyMe_current_post']) && is_numeric($currentpost = $_POST['notifyMe_current_post']) ? (int) $currentpost : 0;
+            if ($currentpost < 1) {
+                $currentpost = 60; // seconds
             }
 
-            $settings->put('active', !empty($_POST['notifyMe_active']), 'boolean');
-            $settings->put('wait', !empty($_POST['notifyMe_wait']), 'boolean');
-            $settings->put('system', !empty($_POST['notifyMe_system']), 'boolean');
-            $settings->put('system_error', !empty($_POST['notifyMe_system_error']), 'boolean');
-            $settings->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), 'boolean');
-            $settings->put('new_comments', $notifyMe_newcomments);
-            $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), 'boolean');
-            $settings->put('current_post', $notifyMe_currentpost);
+            $settings->put('active', !empty($_POST['notifyMe_active']), App::blogWorkspace()::NS_BOOL);
+            $settings->put('wait', !empty($_POST['notifyMe_wait']), App::blogWorkspace()::NS_BOOL);
+            $settings->put('system', !empty($_POST['notifyMe_system']), App::blogWorkspace()::NS_BOOL);
+            $settings->put('system_error', !empty($_POST['notifyMe_system_error']), App::blogWorkspace()::NS_BOOL);
+            $settings->put('new_comments_on', !empty($_POST['notifyMe_new_comments_on']), App::blogWorkspace()::NS_BOOL);
+            $settings->put('new_comments', $newcomments, App::blogWorkspace()::NS_INT);
+            $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), App::blogWorkspace()::NS_BOOL);
+            $settings->put('current_post', $currentpost, App::blogWorkspace()::NS_INT);
         } catch (Exception $e) {
             App::error()->add($e->getMessage());
         }
@@ -125,6 +125,15 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
+        $active          = is_bool($active = $settings->active)                   && $active;
+        $wait            = is_bool($wait = $settings->wait)                       && $wait;
+        $system          = is_bool($system = $settings->system)                   && $system;
+        $system_error    = is_bool($system_error = $settings->system_error)       && $system_error;
+        $new_comments_on = is_bool($new_comments_on = $settings->new_comments_on) && $new_comments_on;
+        $new_comments    = is_numeric($new_comments = $settings->new_comments) ? (int) $new_comments : 0;
+        $current_post_on = is_bool($current_post_on = $settings->current_post_on) && $current_post_on;
+        $current_post    = is_numeric($current_post = $settings->current_post) ? (int) $current_post : 0;
+
         // Add fieldset for plugin options
         echo
         (new Fieldset('notify-me'))
@@ -132,7 +141,7 @@ class BackendBehaviors
         ->fields([
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_active', $settings->active))
+                    (new Checkbox('notifyMe_active', $active))
                         ->value(1)
                         ->label((new Label(__('Display browser notification'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -141,19 +150,19 @@ class BackendBehaviors
                         ->class(['clear', 'form-note']),
                 ]),
                 (new Para())->items([
-                    (new Checkbox('notifyMe_wait', $settings->wait))
+                    (new Checkbox('notifyMe_wait', $wait))
                         ->value(1)
                         ->label((new Label(__('Wait for user interaction before closing notification'), Label::INSIDE_TEXT_AFTER))),
                 ]),
             ]),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_system', $settings->system))
+                    (new Checkbox('notifyMe_system', $system))
                         ->value(1)
                         ->label((new Label(__('Replace Dotclear notifications'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Para())->items([
-                    (new Checkbox('notifyMe_system_error', $settings->system_error))
+                    (new Checkbox('notifyMe_system_error', $system_error))
                         ->value(1)
                         ->label((new Label(__('Including Dotclear errors'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -162,7 +171,7 @@ class BackendBehaviors
             (new Text('h5', __('Notifications:'))),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_new_comments_on', $settings->new_comments_on))
+                    (new Checkbox('notifyMe_new_comments_on', $new_comments_on))
                         ->value(1)
                         ->label((new Label(__('Check new comments'), Label::INSIDE_TEXT_AFTER))),
                 ]),
@@ -171,19 +180,19 @@ class BackendBehaviors
                         ->class(['clear', 'form-note']),
                 ]),
                 (new Para())->items([
-                    (new Number('notifyMe_new_comments', 0, 3600, (int) $settings->new_comments))
+                    (new Number('notifyMe_new_comments', 0, 3600, $new_comments))
                         ->default(30)
                         ->label((new Label(__('Check new comments every (in seconds, default: 30):'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
             ]),
             (new Div())->class('two-boxes')->items([
                 (new Para())->items([
-                    (new Checkbox('notifyMe_current_post_on', $settings->current_post_on))
+                    (new Checkbox('notifyMe_current_post_on', $current_post_on))
                         ->value(1)
                         ->label((new Label(__('Check current edited post'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Para())->items([
-                    (new Number('notifyMe_current_post', 0, 3600, (int) $settings->current_post))
+                    (new Number('notifyMe_current_post', 0, 3600, $current_post))
                         ->default(60)
                         ->label((new Label(__('Check current edited post every (in seconds, default: 60):'), Label::INSIDE_TEXT_BEFORE))),
                 ]),
@@ -218,9 +227,9 @@ class BackendBehaviors
                     'order'              => 'comment_id DESC',              // get last first
                 ];
 
-                $email = App::auth()->getInfo('user_email');
-                $url   = App::auth()->getInfo('user_url');
-                if ($email && $url) {
+                $email = is_string($email = App::auth()->getInfo('user_email')) ? $email : '';
+                $url   = is_string($url = App::auth()->getInfo('user_url')) ? $url : '';
+                if ($email !== '' && $url !== '') {
                     // Ignore own comments/trackbacks
                     $sqlp['sql'] = " AND (comment_email <> '" . $email . "' OR comment_site <> '" . $url . "')";
                 }
@@ -235,7 +244,7 @@ class BackendBehaviors
                 }
 
                 // Get interval between two check
-                $interval = (int) $settings->new_comments;
+                $interval = is_numeric($interval = $settings->new_comments) ? (int) $interval : 0;
                 if ($interval === 0) {
                     $interval = 30; // 30 seconds by default
                 }
@@ -257,7 +266,12 @@ class BackendBehaviors
         $settings = My::prefs();
 
         if ($settings->active && $settings->current_post_on && App::backend()->post_id) {
-            $sqlp = ['post_id' => App::backend()->post_id];   // set in admin/post.php and plugins/pages/page.php
+            $post_id = is_numeric($post_id = App::backend()->post_id) ? (int) $post_id : 0;
+            if ($post_id !== 0) {
+                return '';
+            }
+
+            $sqlp = ['post_id' => $post_id];   // set in admin/post.php and plugins/pages/page.php
             $rs   = App::blog()->getPosts($sqlp);
             if ($rs->isEmpty()) {
                 // Not recorded
@@ -265,12 +279,12 @@ class BackendBehaviors
             }
 
             $media = App::media();
-            $rsm   = $media->getPostMedia((int) App::backend()->post_id);
+            $rsm   = $media->getPostMedia($post_id);
             $hash  = BackendRest::hashPost($rs, $rsm);
             $dt    = $rs->post_upddt;
 
             // Get interval between two check
-            $interval = (int) $settings->current_post;
+            $interval = is_numeric($interval = $settings->current_post) ? (int) $interval : 0;
             if ($interval === 0) {
                 $interval = 60; // 60 seconds by default
             }
@@ -278,7 +292,7 @@ class BackendBehaviors
             return
             App::backend()->page()->jsJson('notify_me_post', [
                 'check' => $interval * 1000,
-                'id'    => App::backend()->post_id,
+                'id'    => $post_id,
                 'hash'  => $hash,
                 'dt'    => $dt,
             ]) .

@@ -41,9 +41,9 @@ class BackendRest
             'sql' => 'AND comment_id > ' . $last_id, // only new ones
         ];
 
-        $email = App::auth()->getInfo('user_email');
-        $url   = App::auth()->getInfo('user_url');
-        if ($email && $url) {
+        $email = is_string($email = App::auth()->getInfo('user_email')) ? $email : '';
+        $url   = is_string($url = App::auth()->getInfo('user_url')) ? $url : '';
+        if ($email !== '' && $url !== '') {
             // Ignore own comments/trackbacks
             $sqlp['sql'] .= " AND (comment_email <> '" . $email . "' OR comment_site <> '" . $url . "')";
         }
@@ -105,18 +105,21 @@ class BackendRest
 
         $rs = App::blog()->getPosts($sqlp);
         if (!$rs->isEmpty()) {
-            $media = App::media();
-            $rsm   = $media->getPostMedia((int) $rs->post_id);
-            $hash  = self::hashPost($rs, $rsm);
-            if ($hash !== $get['post_hash']) {
-                // Fire a notification only if it has not been already fired
-                $dt = $rs->post_upddt;
-                if ($dt !== $get['post_dt']) {
-                    $payload = [
-                        'ret'     => 'dirty',
-                        'msg'     => __('Warning: The current entry has been changed elsewhere!'),
-                        'post_dt' => $dt,
-                    ];
+            $post_id = is_numeric($post_id = $rs->post_id) ? (int) $post_id : 0;
+            if ($post_id !== 0) {
+                $media = App::media();
+                $rsm   = $media->getPostMedia($post_id);
+                $hash  = self::hashPost($rs, $rsm);
+                if ($hash !== $get['post_hash']) {
+                    // Fire a notification only if it has not been already fired
+                    $dt = $rs->post_upddt;
+                    if ($dt !== $get['post_dt']) {
+                        $payload = [
+                            'ret'     => 'dirty',
+                            'msg'     => __('Warning: The current entry has been changed elsewhere!'),
+                            'post_dt' => $dt,
+                        ];
+                    }
                 }
             }
         }
@@ -126,7 +129,7 @@ class BackendRest
 
     /**
      * @param      MetaRecord                                   $rs     Recordset
-     * @param      array<int,\Dotclear\Helper\File\MediaFile>   $rsm    The rsm
+     * @param      array<\Dotclear\Helper\File\MediaFile>       $rsm    The rsm
      */
     public static function hashPost(MetaRecord $rs, array $rsm): string
     {
