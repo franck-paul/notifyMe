@@ -40,7 +40,7 @@ class Install
                 $preferences->put(
                     'active',
                     false,
-                    'boolean',
+                    App::userWorkspace()::WS_BOOL,
                     'Active'
                 );
             }
@@ -49,7 +49,7 @@ class Install
                 $preferences->put(
                     'system',
                     false,
-                    'boolean',
+                    App::userWorkspace()::WS_BOOL,
                     'Replace Dotclear notifications'
                 );
             }
@@ -58,7 +58,7 @@ class Install
                 $preferences->put(
                     'system_error',
                     false,
-                    'boolean',
+                    App::userWorkspace()::WS_BOOL,
                     'Including Dotclear errors?'
                 );
             }
@@ -67,7 +67,7 @@ class Install
                 $preferences->put(
                     'new_comments_on',
                     true,
-                    'boolean',
+                    App::userWorkspace()::WS_BOOL,
                     'Notify for new comments/trackbacks'
                 );
             }
@@ -76,7 +76,7 @@ class Install
                 $preferences->put(
                     'new_comments',
                     30,
-                    'integer',
+                    App::userWorkspace()::WS_INT,
                     'Interval in seconds between new comments checking'
                 );
             }
@@ -85,7 +85,7 @@ class Install
                 $preferences->put(
                     'current_post_on',
                     true,
-                    'boolean',
+                    App::userWorkspace()::WS_BOOL,
                     'Notify for entry changes'
                 );
             }
@@ -94,7 +94,7 @@ class Install
                 $preferences->put(
                     'current_post',
                     60,
-                    'integer',
+                    App::userWorkspace()::WS_INT,
                     'Interval in seconds betwwen current edited post checking'
                 );
             }
