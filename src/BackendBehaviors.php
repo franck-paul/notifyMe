@@ -114,8 +114,8 @@ class BackendBehaviors
             $settings->put('new_comments', $newcomments, App::blogWorkspace()::NS_INT);
             $settings->put('current_post_on', !empty($_POST['notifyMe_current_post_on']), App::blogWorkspace()::NS_BOOL);
             $settings->put('current_post', $currentpost, App::blogWorkspace()::NS_INT);
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         return '';
