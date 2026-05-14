@@ -7,7 +7,7 @@
 function notifyBrowser(msg, title = 'Dotclear', silent = false, wait = false) {
   const notify_options = {
     body: msg,
-    icon: 'images/favicon.ico',
+    icon: 'images/favicon.svg',
     silent,
     requireInteraction: wait,
   };

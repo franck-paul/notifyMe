@@ -6,12 +6,12 @@ export { notifyBrowser };
 function notifyBrowser(msg, title = 'Dotclear', silent = false, wait = false) {
   const notify_options = {
     body: msg,
-    icon: 'images/favicon.ico',
+    icon: 'images/favicon.svg',
     silent,
     requireInteraction: wait,
   };
 
-  if ('Notification' in window) {
+  if ('Notification' in globalThis) {
     // Check if user has already granted notification for this session
     if (Notification.permission === 'granted') {
       // Notifications granted, push it
