@@ -1,12 +1,12 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="notifyMe">
     <name>Browser notifications</name>
-    <version>6.2</version>
+    <version>7.0</version>
     <author>Franck Paul and contributors</author>
     <desc>Display notifications in your web browser</desc>
-    <date>2026-03-31T17:29:11+0200</date>
-    <file>https://github.com/franck-paul/notifyMe/releases/download/6.2/plugin-notifyMe-6.2.zip</file>
-    <da:dcmin>2.36</da:dcmin>
+    <date>2026-05-14T15:53:21+0200</date>
+    <file>https://github.com/franck-paul/notifyMe/releases/download/7.0/plugin-notifyMe-7.0.zip</file>
+    <da:dcmin>2.38</da:dcmin>
     <da:details>https://dotclear.org/plugin/detail/notifyMe</da:details>
     <da:support>https://github.com/franck-paul/notifyMe</da:support>
   </module>
