@@ -18,7 +18,7 @@ $this->registerModule(
     '7.0',
     [
         'date'        => '2026-05-14T15:53:21+0200',
-        'requires'    => [['core', '2.38']],
+        'requires'    => [['core', '2.39']],
         'permissions' => 'My',
         'type'        => 'plugin',
         'settings'    => [

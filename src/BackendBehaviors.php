@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\notifyMe;
 
 use Dotclear\App;
+use Dotclear\Core\Backend\Notice;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Div;
 use Dotclear\Helper\Html\Form\Fieldset;
@@ -59,11 +60,7 @@ class BackendBehaviors
         return '';
     }
 
-    /**
-     * @param      mixed                    $unused  The unused
-     * @param      array<string, string>    $notice  The notice
-     */
-    public static function adminPageNotification($unused, array $notice): string
+    public static function adminPageNotification(Notice $notice): string
     {
         $settings = My::prefs();
         if ($settings->active && $settings->system) {
@@ -71,20 +68,20 @@ class BackendBehaviors
                 'success' => '',
                 'warning' => __(' - warning'),
                 'error'   => __(' - error'), ];
+
             // Set notification title
-            $title  = sprintf(__('Dotclear : %s'), App::blog()->name());
+            $title = sprintf(__('Dotclear : %s'), App::blog()->name());
+
             $silent = true;
-            if (isset($type[$notice['class']])) {
-                $title .= $type[$notice['class']];
-                if ($notice['class'] === 'error') {
+            $class  = $notice->getClass();
+            if ($class !== '' && isset($type[$class])) {
+                $title .= $type[$class];
+                if ($class === 'error') {
                     $silent = false;
                 }
             }
 
-            // Set notification text
-            $msg = $notice['text'];
-
-            return self::notifyBrowser($msg, $title, $silent);
+            return self::notifyBrowser($notice->getMsg(), $title, $silent);
         }
 
         return '';
