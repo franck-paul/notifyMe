@@ -46,7 +46,11 @@ class BackendBehaviors
     public static function adminPageNotificationError($unused, ErrorInterface $err): string
     {
         $settings = My::prefs();
-        if ($settings->active && $settings->system && $settings->system_error && $err->flag()) {
+        if ($settings->getBool('active')
+            && $settings->getBool('system')
+            && $settings->getBool('system_error')
+            && $err->flag()
+        ) {
             $message = '';
             $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
 
@@ -63,7 +67,9 @@ class BackendBehaviors
     public static function adminPageNotification(Notice $notice): string
     {
         $settings = My::prefs();
-        if ($settings->active && $settings->system) {
+        if ($settings->getBool('active')
+            && $settings->getBool('system')
+        ) {
             $type = [
                 'success' => '',
                 'warning' => __(' - warning'),
@@ -122,14 +128,14 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        $active          = is_bool($active = $settings->active)                   && $active;
-        $wait            = is_bool($wait = $settings->wait)                       && $wait;
-        $system          = is_bool($system = $settings->system)                   && $system;
-        $system_error    = is_bool($system_error = $settings->system_error)       && $system_error;
-        $new_comments_on = is_bool($new_comments_on = $settings->new_comments_on) && $new_comments_on;
-        $new_comments    = is_numeric($new_comments = $settings->new_comments) ? (int) $new_comments : 0;
-        $current_post_on = is_bool($current_post_on = $settings->current_post_on) && $current_post_on;
-        $current_post    = is_numeric($current_post = $settings->current_post) ? (int) $current_post : 0;
+        $active          = $settings->getBool('active', false);
+        $wait            = $settings->getBool('wait', false);
+        $system          = $settings->getBool('system', false);
+        $system_error    = $settings->getBool('system_error', false);
+        $new_comments_on = $settings->getBool('new_comments_on', false);
+        $new_comments    = $settings->getInt('new_comments', false);
+        $current_post_on = $settings->getBool('current_post_on', false);
+        $current_post    = $settings->getInt('current_post', false);
 
         // Add fieldset for plugin options
         echo
@@ -204,19 +210,19 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings->active) {
+        if ($settings->getBool('active')) {
             // Set notification title
             $title = sprintf(__('Dotclear : %s'), App::blog()->name());
 
             echo
             App::backend()->page()->jsJson('notify_me_config', [
                 'title' => $title,
-                'wait'  => $settings->wait,
+                'wait'  => $settings->getBool('wait'),
             ]) .
             My::jsLoad('notify.js') .
             My::jsLoad('queue.js');
 
-            if ($settings->new_comments_on) {
+            if ($settings->getBool('new_comments_on')) {
                 $sqlp = [
                     'limit'              => 1,                              // only the last one
                     'no_content'         => true,                           // content is not required
@@ -241,7 +247,7 @@ class BackendBehaviors
                 }
 
                 // Get interval between two check
-                $interval = is_numeric($interval = $settings->new_comments) ? (int) $interval : 0;
+                $interval = $settings->getInt('new_comments', false);
                 if ($interval === 0) {
                     $interval = 30; // 30 seconds by default
                 }
@@ -262,7 +268,7 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings->active && $settings->current_post_on && App::backend()->post_id) {
+        if ($settings->getBool('active') && $settings->getBool('current_post_on') && App::backend()->post_id) {
             $post_id = is_numeric($post_id = App::backend()->post_id) ? (int) $post_id : 0;
             if ($post_id !== 0) {
                 return '';
@@ -281,7 +287,7 @@ class BackendBehaviors
             $dt    = $rs->post_upddt;
 
             // Get interval between two check
-            $interval = is_numeric($interval = $settings->current_post) ? (int) $interval : 0;
+            $interval = $settings->getInt('current_post', false);
             if ($interval === 0) {
                 $interval = 60; // 60 seconds by default
             }
