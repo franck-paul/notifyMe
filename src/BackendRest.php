@@ -54,7 +54,7 @@ class BackendRest
         if ($count) {
             while ($rs->fetch()) {
                 if (!$rs->isMe()) {
-                    $last_comment_id = $rs->comment_id;
+                    $last_comment_id = $rs->intField('comment_id');
                 } else {
                     $count--;
                 }
@@ -112,7 +112,7 @@ class BackendRest
                 $hash  = self::hashPost($rs, $rsm);
                 if ($hash !== $get['post_hash']) {
                     // Fire a notification only if it has not been already fired
-                    $dt = $rs->post_upddt;
+                    $dt = $rs->strField('post_upddt');
                     if ($dt !== $get['post_dt']) {
                         $payload = [
                             'ret'     => 'dirty',

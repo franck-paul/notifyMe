@@ -241,7 +241,7 @@ class BackendBehaviors
 
                 if ($rs->count()) {
                     $rs->fetch();
-                    $last_comment_id = $rs->comment_id;
+                    $last_comment_id = $rs->intField('comment_id');
                 } else {
                     $last_comment_id = -1;
                 }
@@ -284,7 +284,7 @@ class BackendBehaviors
             $media = App::media();
             $rsm   = $media->getPostMedia($post_id);
             $hash  = BackendRest::hashPost($rs, $rsm);
-            $dt    = $rs->post_upddt;
+            $dt    = $rs->strField('post_upddt');
 
             // Get interval between two check
             $interval = $settings->getInt('current_post', false);
