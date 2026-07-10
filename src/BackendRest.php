@@ -139,7 +139,7 @@ class BackendRest
             $cols = $rs->columns();
             foreach ($cols as $i => $c) {
                 if (!in_array($i, ['nb_comment', 'nb_trackback', 'post_upddt'])) {
-                    $l[] = $rs->f($c);
+                    $l[] = $rs->field($c);
                 }
             }
         }
