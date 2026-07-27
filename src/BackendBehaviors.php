@@ -268,7 +268,10 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings->getBool('active') && $settings->getBool('current_post_on') && App::backend()->post_id) {
+        if ($settings->getBool('active')
+            && $settings->getBool('current_post_on')
+            && App::backend()->post_id
+        ) {
             $post_id = is_numeric($post_id = App::backend()->post_id) ? (int) $post_id : 0;
             if ($post_id !== 0) {
                 return '';
