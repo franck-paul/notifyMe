@@ -17,6 +17,7 @@ namespace Dotclear\Plugin\notifyMe;
 
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
+use Dotclear\Helper\File\MediaFile;
 use Exception;
 
 class BackendRest
@@ -128,24 +129,24 @@ class BackendRest
     }
 
     /**
-     * @param      MetaRecord                                   $rs     Recordset
-     * @param      array<\Dotclear\Helper\File\MediaFile>       $rsm    The rsm
+     * @param      MetaRecord             $metaRecord     Recordset
+     * @param      array<MediaFile>       $mediaFiles    The rsm
      */
-    public static function hashPost(MetaRecord $rs, array $rsm): string
+    public static function hashPost(MetaRecord $metaRecord, array $mediaFiles): string
     {
         $l = [];
-        if ($rs->fetch()) {
+        if ($metaRecord->fetch()) {
             // Do not take into account nb of comments or trackbacks, neither updated datetime
-            $cols = $rs->columns();
+            $cols = $metaRecord->columns();
             foreach ($cols as $i => $c) {
                 if (!in_array($i, ['nb_comment', 'nb_trackback', 'post_upddt'])) {
-                    $l[] = $rs->field($c);
+                    $l[] = $metaRecord->field($c);
                 }
             }
         }
 
-        foreach ($rsm as $f) {
-            $l[] = $f->media_id;
+        foreach ($mediaFiles as $mediumFile) {
+            $l[] = $mediumFile->media_id;
         }
 
         $str = serialize($l);

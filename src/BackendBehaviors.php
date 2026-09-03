@@ -41,20 +41,20 @@ class BackendBehaviors
 
     /**
      * @param      mixed            $unused  The unused
-     * @param      ErrorInterface   $err     The error
+     * @param      ErrorInterface   $error     The error
      */
-    public static function adminPageNotificationError($unused, ErrorInterface $err): string
+    public static function adminPageNotificationError($unused, ErrorInterface $error): string
     {
         $settings = My::prefs();
         if ($settings->getBool('active')
             && $settings->getBool('system')
             && $settings->getBool('system_error')
-            && $err->flag()
+            && $error->flag()
         ) {
             $message = '';
             $title   = sprintf(__('Dotclear : %s'), App::blog()->name()) . __(' - error');
 
-            foreach ($err->dump() as $msg) {
+            foreach ($error->dump() as $msg) {
                 $message .= ($message === '' ? '' : ' – ') . $msg;
             }
 
