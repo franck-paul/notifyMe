@@ -49,8 +49,8 @@ class Backend
             'adminPageHeaders' => BackendBehaviors::adminPostHeaders(...),
 
             // Transform error and standard DC notices to notifications
-            'adminPageNotificationError' => BackendBehaviors::adminPageNotificationError(...),
-            'adminPageNotificationV2'    => BackendBehaviors::adminPageNotification(...),
+            'adminPageNotificationErrorV2' => BackendBehaviors::adminPageNotificationError(...),
+            'adminPageNotificationV2'      => BackendBehaviors::adminPageNotification(...),
         ]);
 
         App::rest()->addFunction('notifyMeCheckNewComments', BackendRest::checkNewComments(...));
