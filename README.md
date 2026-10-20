@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/releases)
 [![Date](https://img.shields.io/github/release-date/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/releases)
 [![Issues](https://img.shields.io/github/issues/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/issues)
-[![License](https://img.shields.io/github/license/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/franck-paul/notifyMe)](https://github.com/franck-paul/notifyMe/blob/main/LICENSE)
 
 ![Notification sample](http://open-time.net/public/screenshots/2015/notify-me-display.jpg)
 
