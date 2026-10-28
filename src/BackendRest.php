@@ -139,7 +139,7 @@ class BackendRest
             // Do not take into account nb of comments or trackbacks, neither updated datetime
             $cols = $metaRecord->columns();
             foreach ($cols as $i => $c) {
-                if (!in_array($i, ['nb_comment', 'nb_trackback', 'post_upddt'])) {
+                if (!in_array($i, ['nb_comment', 'nb_trackback', 'post_upddt'], true)) {
                     $l[] = $metaRecord->field($c);
                 }
             }
