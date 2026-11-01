@@ -52,7 +52,7 @@ class BackendRest
         $rs    = App::blog()->getComments($sqlp);
         $count = $rs->count();
 
-        if ($count) {
+        if ($count > 0) {
             while ($rs->fetch()) {
                 if (!$rs->isMe()) {
                     $last_comment_id = $rs->intField('comment_id');

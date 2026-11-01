@@ -46,9 +46,9 @@ class BackendBehaviors
     public static function adminPageNotificationError(ErrorInterface $error): string
     {
         $settings = My::prefs();
-        if ($settings->getBool('active')
-            && $settings->getBool('system')
-            && $settings->getBool('system_error')
+        if ($settings->getBool('active', false)
+            && $settings->getBool('system', false)
+            && $settings->getBool('system_error', false)
             && $error->flag()
         ) {
             $message = '';
@@ -67,8 +67,8 @@ class BackendBehaviors
     public static function adminPageNotification(Notice $notice): string
     {
         $settings = My::prefs();
-        if ($settings->getBool('active')
-            && $settings->getBool('system')
+        if ($settings->getBool('active', false)
+            && $settings->getBool('system', false)
         ) {
             $type = [
                 'success' => '',
@@ -220,7 +220,7 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings->getBool('active')) {
+        if ($settings->getBool('active', false)) {
             // Set notification title
             $title = sprintf(__('Dotclear : %s'), App::blog()->name());
 
@@ -232,7 +232,7 @@ class BackendBehaviors
             My::jsLoad('notify.js') .
             My::jsLoad('queue.js');
 
-            if ($settings->getBool('new_comments_on')) {
+            if ($settings->getBool('new_comments_on', false)) {
                 $sqlp = [
                     'limit'              => 1,                              // only the last one
                     'no_content'         => true,                           // content is not required
@@ -249,7 +249,7 @@ class BackendBehaviors
 
                 $rs = App::blog()->getComments($sqlp);
 
-                if ($rs->count()) {
+                if ($rs->count() > 0) {
                     $rs->fetch();
                     $last_comment_id = $rs->intField('comment_id');
                 } else {
@@ -278,9 +278,9 @@ class BackendBehaviors
     {
         $settings = My::prefs();
 
-        if ($settings->getBool('active')
-            && $settings->getBool('current_post_on')
-            && App::backend()->post_id
+        if ($settings->getBool('active', false)
+            && $settings->getBool('current_post_on', false)
+            && isset(App::backend()->post_id)
         ) {
             $post_id = is_numeric($post_id = App::backend()->post_id) ? (int) $post_id : 0;
             if ($post_id !== 0) {
