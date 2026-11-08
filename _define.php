@@ -18,9 +18,9 @@ if (isset($this) && is_object($this) && method_exists($this, 'registerModule') &
         'Browser notifications',
         'Display notifications in your web browser',
         'Franck Paul and contributors',
-        '8.0',
+        '9.0',
         [
-            'date'        => '2026-08-03T10:07:00+0200',
+            'date'        => '2026-11-08T10:18:49+0100',
             'requires'    => [['core', '2.40']],
             'permissions' => 'My',
             'type'        => 'plugin',
